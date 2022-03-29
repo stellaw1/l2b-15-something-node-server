@@ -4,7 +4,7 @@ const Database = require('./Database.js');
 var db = Database("mongodb+srv://admin:spycatadmin@cluster0.p2llx.mongodb.net/database?retryWrites=true&w=majority", "database");
 
 const app = express();
-const port = 3000;
+const port = 8000;
 
 app.use(express.json());
 app.use(express.urlencoded());
@@ -23,22 +23,22 @@ app.get("/users", (req, res) => {
     });
 });
 
-// app.post("/activities", (req, res) => {
-//   console.log("Add record!");
-//   let activity = req.body;
+app.post("/user", (req, res) => {
+  console.log("POST /user");
+  let user = req.body;
 
-//   if (activity) {
-//     db.postActivity(activity)
-//       .then(results => {
-//         console.log(results);
-//         res.status(200).send(JSON.stringify(results))
-//       }).catch(err => {
-//         res.status(400).send(JSON.stringify(err))
-//       });
-//   } else {
-//     res.status(400).send('empty request body found')
-//   }
-// });
+  if (user) {
+    db.postUser(user)
+      .then(results => {
+        console.log(results);
+        res.status(200).send(JSON.stringify(results))
+      }).catch(err => {
+        res.status(400).send(JSON.stringify(err))
+      });
+  } else {
+    res.status(400).send('empty request body found')
+  }
+});
 
 // app.put("/activities/:id", (req, res) => {
 //   console.log("Activity changed!");

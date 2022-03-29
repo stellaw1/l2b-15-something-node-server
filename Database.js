@@ -46,36 +46,27 @@ Database.prototype.getUsers = function(){
 	)
 }
 
-function isActivityType(activity) {
-	if (!activity.hasOwnProperty("id") || !Number.isInteger(activity["id"])) {
-		return "id";
+function isUserType(user) {
+	if (!user.hasOwnProperty("username") || typeof(user["username"]) != "string") {
+		return "username";
 	}
-	if (!activity.hasOwnProperty("date") || typeof(activity["date"]) != "string") {
-		return "date";
-	}
-	if (!activity.hasOwnProperty("name") || typeof(activity["name"]) != "string") {
-		return "name";
-	}
-	if (!activity.hasOwnProperty("duration") || !Number.isInteger(activity["duration"])) {
-		return "duration";
-	}
-	if (!activity.hasOwnProperty("distance") || typeof(activity["distance"]) != "number") {
-		return "distance";
+	if (!user.hasOwnProperty("pet_colour") || typeof(user["pet_colour"]) != "string") {
+		return "pet_colour";
 	}
 	return null;
 }
 
-Database.prototype.postActivity = function(activity){
+Database.prototype.postUser = function(user){
 	return this.connected.then(db =>
 		new Promise((resolve, reject) => {
 
 			let err;
-			if (err = isActivityType(activity)) {
+			if (err = isUserType(user)) {
 				reject(new Error("invalid " + err + " property in given activity"));
 			}
 
-			const col = db.collection('activities');
-				col.insertOne(activity, function(err, res){
+			const col = db.collection('users');
+				col.insertOne(user, function(err, res){
 					if(err){
 						console.log(err);
 					}
@@ -85,59 +76,59 @@ Database.prototype.postActivity = function(activity){
 	)
 }
 
-function isPutActivityType(activity) {
-	if (!activity.hasOwnProperty("date") || typeof(activity["date"]) != "string") {
-		return "date";
-	}
-	if (!activity.hasOwnProperty("name") || typeof(activity["name"]) != "string") {
-		return "name";
-	}
-	if (!activity.hasOwnProperty("duration") || !Number.isInteger(activity["duration"])) {
-		return "duration";
-	}
-	if (!activity.hasOwnProperty("distance") || typeof(activity["distance"]) != "number") {
-		return "distance";
-	}
-	return null;
-}
+// function isPutActivityType(activity) {
+// 	if (!activity.hasOwnProperty("date") || typeof(activity["date"]) != "string") {
+// 		return "date";
+// 	}
+// 	if (!activity.hasOwnProperty("name") || typeof(activity["name"]) != "string") {
+// 		return "name";
+// 	}
+// 	if (!activity.hasOwnProperty("duration") || !Number.isInteger(activity["duration"])) {
+// 		return "duration";
+// 	}
+// 	if (!activity.hasOwnProperty("distance") || typeof(activity["distance"]) != "number") {
+// 		return "distance";
+// 	}
+// 	return null;
+// }
 
-Database.prototype.putActivity = function(id, activity){
-	return this.connected.then(db =>
-		new Promise((resolve, reject) => {
+// Database.prototype.putActivity = function(id, activity){
+// 	return this.connected.then(db =>
+// 		new Promise((resolve, reject) => {
 
-			let err;
-			if (err = isPutActivityType(activity)) {
-				reject(new Error("invalid " + err + " property in given activity"));
-			}
+// 			let err;
+// 			if (err = isPutActivityType(activity)) {
+// 				reject(new Error("invalid " + err + " property in given activity"));
+// 			}
 
-			var myquery = { id: id };
-  			var newvalues = { $set: activity };
+// 			var myquery = { id: id };
+//   			var newvalues = { $set: activity };
 
-			const col = db.collection('activities');
-				col.updateOne(myquery, newvalues, function(err, res){
-					if(err){
-						console.log(err);
-					}
-					resolve(res);
-				});
-		})
-	)
-}
+// 			const col = db.collection('activities');
+// 				col.updateOne(myquery, newvalues, function(err, res){
+// 					if(err){
+// 						console.log(err);
+// 					}
+// 					resolve(res);
+// 				});
+// 		})
+// 	)
+// }
 
-Database.prototype.deleteActivity = function(id){
-	return this.connected.then(db =>
-		new Promise((resolve, reject) => {
-			var myquery = { id: id };
+// Database.prototype.deleteActivity = function(id){
+// 	return this.connected.then(db =>
+// 		new Promise((resolve, reject) => {
+// 			var myquery = { id: id };
 
-			const col = db.collection('activities');
-				col.deleteOne(myquery, function(err, res){
-					if(err){
-						console.log(err);
-					}
-					resolve(res);
-				});
-		})
-	)
-}
+// 			const col = db.collection('activities');
+// 				col.deleteOne(myquery, function(err, res){
+// 					if(err){
+// 						console.log(err);
+// 					}
+// 					resolve(res);
+// 				});
+// 		})
+// 	)
+// }
 
 module.exports = Database;
