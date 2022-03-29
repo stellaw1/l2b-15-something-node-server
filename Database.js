@@ -75,7 +75,7 @@ Database.prototype.postUser = function(user){
 					if(err){
 						console.log(err);
 					}
-					resolve(activity);
+					resolve(user);
 				});
 		})
 	)
