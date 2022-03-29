@@ -26,6 +26,7 @@ app.get("/users", (req, res) => {
 app.post("/user", (req, res) => {
   console.log("POST /user");
   let user = req.body;
+  console.log(req);
 
   if (user) {
     db.postUser(user)
