@@ -164,6 +164,7 @@ function isChatType(chat) {
 	}
 	return null;
 }
+
 Database.prototype.postChat = function(chat){
 	return this.connected.then(db =>
 		new Promise((resolve, reject) => {
@@ -186,6 +187,84 @@ Database.prototype.postChat = function(chat){
 				}
 				resolve(res);
 			});
+		})
+	)
+}
+
+Database.prototype.getFriendsForUser = function(user){
+	return this.connected.then(db =>
+		new Promise((resolve, reject) => {
+			
+			if (!user.hasOwnProperty("user_id") || typeof(user["user_id"]) != "string") {
+				reject(new Error("invalid user_id property in given user object"));
+			}
+
+			var query = { user_id: user.username };
+			
+			const col = db.collection('friendships');
+			col.find(query, function(err, res){
+				if(err){
+					console.log(err);
+				}
+				resolve(res);
+			});
+		})
+	)
+}
+
+function isFriendshipType(friendship) {
+	if (!friendship.hasOwnProperty("user_id") || typeof(friendship["user_id"]) != "string") {
+		return "user_id";
+	}
+	if (!friendship.hasOwnProperty("friend_id") || typeof(friendship["friend_id"]) != "string") {
+		return "friend_id";
+	}
+	return null;
+}
+
+Database.prototype.postFriendship = function(friendship){
+	return this.connected.then(db =>
+		new Promise((resolve, reject) => {
+
+			if (err = isFriendshipType(friendship)) {
+				reject(new Error("invalid " + err + " property in given friendship object"));
+			}
+			
+			let data = {
+				user_id: friendship.user_id,
+				friend_id: friendship.friend_id
+			};
+
+			const col = db.collection('friendships');
+			col.insertOne(data, function(err, res){
+				if(err){
+					console.log(err);
+				}
+				resolve(res);
+			});
+		})
+	)
+}
+
+Database.prototype.deleteFriendship = function(friendship){
+	return this.connected.then(db =>
+		new Promise((resolve, reject) => {
+			var myquery = { 
+				user_id: friendship.user_id,
+				friend_id: friendship.friend_id
+			 };
+
+			if (err = isFriendshipType(friendship)) {
+				reject(new Error("invalid " + err + " property in given friendship object"));
+			}
+
+			const col = db.collection('friendships');
+				col.deleteOne(myquery, function(err, res){
+					if(err){
+						console.log(err);
+					}
+					resolve(res);
+				});
 		})
 	)
 }

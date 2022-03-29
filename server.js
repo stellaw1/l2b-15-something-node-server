@@ -97,6 +97,51 @@ app.route("/chat")
     }
   });
 
+app.route("/friendship")
+  .get((req, res) => {
+    let user = req.body;
+
+    if (user) {
+    db.getFriendsForUser(user)
+      .then(results => {
+        console.log(results);
+        res.status(200).send(JSON.stringify(results));
+      });
+    } else {
+      res.status(400).send('empty request body found')
+    }
+  })
+  .post((req, res) => {
+    let friendship = req.body;
+
+    if (friendship) {
+      db.postFriendship(friendship)
+        .then(results => {
+          console.log(results);
+          res.status(200).send(JSON.stringify(results))
+        }).catch(err => {
+          res.status(400).send(JSON.stringify(err))
+        });
+    } else {
+      res.status(400).send('empty request body found')
+    }
+  })
+  .delete((req, res) => {
+    let friendship = req.body;
+
+    if (friendship) {
+      db.deleteFriendship(friendship)
+        .then(results => {
+          console.log(results);
+          res.status(200).send(JSON.stringify(results))
+        }).catch(err => {
+          res.status(400).send(JSON.stringify(err))
+        });
+    } else {
+      res.status(400).send('empty request body found')
+    }
+  });
+
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });
