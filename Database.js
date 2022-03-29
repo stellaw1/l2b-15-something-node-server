@@ -31,11 +31,8 @@ function Database(mongoUrl, dbName){
 Database.prototype.getAllUsers = function(){
 	return this.connected.then(db =>
 		new Promise((resolve, reject) => {
-			/* TODO: read the chatrooms from `db`
-			 * and resolve an array of chatrooms */
 			const col = db.collection('users');
 			col.find({}).toArray(function(err, items) {
-
 					if (err) {
 						reject(err);
 					}
@@ -45,7 +42,6 @@ Database.prototype.getAllUsers = function(){
 		})
 	)
 }
-
 
 Database.prototype.getUserByUsername = function(username){
 	return this.connected.then(db =>
@@ -80,7 +76,7 @@ Database.prototype.postUser = function(user){
 
 			let err;
 			if (err = isUserType(user)) {
-				reject(new Error("invalid " + err + " property in given activity"));
+				reject(new Error("invalid " + err + " property in given user"));
 			}
 
 			// initialize friendship points to 0
@@ -93,7 +89,7 @@ Database.prototype.postUser = function(user){
 				if(err){
 					console.log(err);
 				}
-				resolve(user);
+				resolve(res);
 			});
 		})
 	)
@@ -120,6 +116,75 @@ Database.prototype.incrementFriendship = function(username, activity){
 				} else {
 					reject(new Error("no user with matching username found"));
 				}
+			});
+		})
+	)
+}
+
+function isUsersType(users) {
+	if (!users.hasOwnProperty("sender_id") || typeof(users["sender_id"]) != "string") {
+		return "sender_id";
+	}
+	if (!users.hasOwnProperty("receiver_id") || typeof(users["receiver_id"]) != "string") {
+		return "receiver_id";
+	}
+	return null;
+}
+
+Database.prototype.getChatHistory = function(users){
+	return this.connected.then(db =>
+		new Promise((resolve, reject) => {
+
+			if (err = isUsersType(users)) {
+				reject(new Error("invalid " + err + " property in given users"));
+			}
+			
+			let query = {
+				sender_id: users.sender_id,
+				receiver_id: users.receiver_id
+			};
+
+			const col = db.collection('chatlog');
+			col.find(query).toArray(function(err, items) {
+					if (err) {
+						reject(err);
+					}
+					resolve(items);
+				});
+		})
+	)
+}
+
+function isChatType(chat) {
+	if (err = isUsersType(chat)) {
+		return err;
+	}
+	if (!chat.hasOwnProperty("message") || typeof(chat["message"]) != "string") {
+		return "message";
+	}
+	return null;
+}
+Database.prototype.postChat = function(chat){
+	return this.connected.then(db =>
+		new Promise((resolve, reject) => {
+
+			if (err = isChatType(chat)) {
+				reject(new Error("invalid " + err + " property in given chat object"));
+			}
+			
+			let data = {
+				sender_id: chat.sender_id,
+				receiver_id: chat.receiver_id,
+				message: chat.message,
+				time: Date.now()
+			};
+
+			const col = db.collection('chatlog');
+			col.insertOne(data, function(err, res){
+				if(err){
+					console.log(err);
+				}
+				resolve(res);
 			});
 		})
 	)

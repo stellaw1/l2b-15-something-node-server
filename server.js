@@ -10,96 +10,92 @@ app.use(express.json());
 app.use(express.urlencoded());
 
 
-app.get("/", (req, res) => {
-  res.send("Hello world");
-});
-
-app.get("/users", (req, res) => {
-  console.log("GET /users");
-  db.getAllUsers()
-    .then(results => {
-      console.log(results);
-      res.status(200).send(JSON.stringify(results));
-    });
-});
-
-app.get("/user", (req, res) => {
-  let username = req.body;
-
-  if (username) {
-  db.getUserByUsername(username)
-    .then(results => {
-      console.log(results);
-      res.status(200).send(JSON.stringify(results));
-    });
-  } else {
-    res.status(400).send('empty request body found')
-  }
-});
-
-app.post("/user", (req, res) => {
-  let user = req.body;
-  console.log(req);
-
-  if (user) {
-    db.postUser(user)
+app.route("/users")
+  .get((req, res) => {
+    db.getAllUsers()
       .then(results => {
         console.log(results);
-        res.status(200).send(JSON.stringify(results))
-      }).catch(err => {
-        res.status(400).send(JSON.stringify(err))
+        res.status(200).send(JSON.stringify(results));
       });
-  } else {
-    res.status(400).send('empty request body found')
-  }
-});
+  });
 
-app.post("/increment", (req, res) => {
-  let user = req.body;
+app.route("/user")
+  .get((req, res) => {
+    let username = req.body;
 
-  if (user) {
-    db.incrementFriendship(user)
+    if (username) {
+    db.getUserByUsername(username)
       .then(results => {
         console.log(results);
-        res.status(200).send(JSON.stringify(results))
-      }).catch(err => {
-        res.status(400).send(JSON.stringify(err))
+        res.status(200).send(JSON.stringify(results));
       });
-  } else {
-    res.status(400).send('empty request body found')
-  }
-});
+    } else {
+      res.status(400).send('empty request body found')
+    }
+  })
+  .post("/user", (req, res) => {
+    let user = req.body;
+    console.log(req);
 
-// app.put("/activities/:id", (req, res) => {
-//   console.log("Activity changed!");
-//   let id = parseInt(req.params.id);
-//   let activity = req.body;
+    if (user) {
+      db.postUser(user)
+        .then(results => {
+          console.log(results);
+          res.status(200).send(JSON.stringify(results))
+        }).catch(err => {
+          res.status(400).send(JSON.stringify(err))
+        });
+    } else {
+      res.status(400).send('empty request body found')
+    }
+  });
 
-//   if (activity && id) {
-//     db.putActivity(id, activity)
-//       .then(results => {
-//         console.log(results);
-//         res.status(200).send(JSON.stringify(results))
-//       });
-//   } else {
-//     res.status(400).send('empty request body or param found')
-//   }
-// });
+app.route("/increment")
+  .post((req, res) => {
+    let user = req.body;
 
-// app.delete("/activities/:id", (req, res) => {
-//   console.log("Activity deleted!");
-//   let id = parseInt(req.params.id);
+    if (user) {
+      db.incrementFriendship(user)
+        .then(results => {
+          console.log(results);
+          res.status(200).send(JSON.stringify(results))
+        }).catch(err => {
+          res.status(400).send(JSON.stringify(err))
+        });
+    } else {
+      res.status(400).send('empty request body found')
+    }
+  });
 
-//   if (id) {
-//     db.deleteActivity(id)
-//       .then(results => {
-//         console.log(results);
-//         res.status(200).send(JSON.stringify(results))
-//       });
-//   } else {
-//     res.status(400).send('empty param found')
-//   }
-// });
+app.route("/chat")
+  .get((req, res) => {
+    let users = req.body;
+
+    if (users) {
+    db.getChatHistory(users)
+      .then(results => {
+        console.log(results);
+        res.status(200).send(JSON.stringify(results));
+      });
+    } else {
+      res.status(400).send('empty request body found')
+    }
+  })
+  .post((req, res) => {
+    let chat = req.body;
+
+    if (chat) {
+      db.postChat(chat)
+        .then(results => {
+          console.log(results);
+          res.status(200).send(JSON.stringify(results))
+        }).catch(err => {
+          res.status(400).send(JSON.stringify(err))
+        });
+    } else {
+      res.status(400).send('empty request body found')
+    }
+  });
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
