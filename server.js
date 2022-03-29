@@ -33,7 +33,7 @@ app.route("/user")
       res.status(400).send('empty request body found')
     }
   })
-  .post("/user", (req, res) => {
+  .post((req, res) => {
     let user = req.body;
     console.log(req);
 
