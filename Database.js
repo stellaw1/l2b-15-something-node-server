@@ -28,7 +28,7 @@ function Database(mongoUrl, dbName){
 	);
 }
 
-Database.prototype.getUsers = function(){
+Database.prototype.getAllUsers = function(){
 	return this.connected.then(db =>
 		new Promise((resolve, reject) => {
 			/* TODO: read the chatrooms from `db`
@@ -42,6 +42,24 @@ Database.prototype.getUsers = function(){
 
 					resolve(items);
 				});
+		})
+	)
+}
+
+
+Database.prototype.getUserByUsername = function(username){
+	return this.connected.then(db =>
+		new Promise((resolve, reject) => {
+			const col = db.collection('users');
+
+			let query = username.username;
+
+			col.findOne({username: query}, function(err, document) {
+				if (err) {
+					reject(err);
+				}
+				resolve(document);
+			});
 		})
 	)
 }
@@ -71,12 +89,38 @@ Database.prototype.postUser = function(user){
 			console.log(user);
 
 			const col = db.collection('users');
-				col.insertOne(user, function(err, res){
-					if(err){
-						console.log(err);
-					}
-					resolve(user);
-				});
+			col.insertOne(user, function(err, res){
+				if(err){
+					console.log(err);
+				}
+				resolve(user);
+			});
+		})
+	)
+}
+
+Database.prototype.incrementFriendship = function(username, activity){
+	return this.connected.then(db =>
+		new Promise((resolve, reject) => {
+			
+			var query = { username: username.username };
+
+			const col = db.collection('users');
+			col.findOne(query, function(err, document) {
+				if (document) {
+					var oldPoints = document["friendship_points"];
+					var newPoints = {friendship_points: oldPoints + 1}
+					var newvalues = { $set: newPoints };
+					col.updateOne(query, newvalues, function(err, res){
+						if(err){
+							console.log(err);
+						}
+						resolve(res);
+					});
+				} else {
+					reject(new Error("no user with matching username found"));
+				}
+			});
 		})
 	)
 }

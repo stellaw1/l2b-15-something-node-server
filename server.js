@@ -16,20 +16,49 @@ app.get("/", (req, res) => {
 
 app.get("/users", (req, res) => {
   console.log("GET /users");
-  db.getUsers()
+  db.getAllUsers()
     .then(results => {
       console.log(results);
       res.status(200).send(JSON.stringify(results));
     });
 });
 
+app.get("/user", (req, res) => {
+  let username = req.body;
+
+  if (username) {
+  db.getUserByUsername(username)
+    .then(results => {
+      console.log(results);
+      res.status(200).send(JSON.stringify(results));
+    });
+  } else {
+    res.status(400).send('empty request body found')
+  }
+});
+
 app.post("/user", (req, res) => {
-  console.log("POST /user");
   let user = req.body;
   console.log(req);
 
   if (user) {
     db.postUser(user)
+      .then(results => {
+        console.log(results);
+        res.status(200).send(JSON.stringify(results))
+      }).catch(err => {
+        res.status(400).send(JSON.stringify(err))
+      });
+  } else {
+    res.status(400).send('empty request body found')
+  }
+});
+
+app.post("/increment", (req, res) => {
+  let user = req.body;
+
+  if (user) {
+    db.incrementFriendship(user)
       .then(results => {
         console.log(results);
         res.status(200).send(JSON.stringify(results))
