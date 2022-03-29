@@ -68,6 +68,8 @@ Database.prototype.postUser = function(user){
 			// initialize friendship points to 0
 			user["friendship_points"] = 0;
 
+			console.log(user);
+
 			const col = db.collection('users');
 				col.insertOne(user, function(err, res){
 					if(err){
