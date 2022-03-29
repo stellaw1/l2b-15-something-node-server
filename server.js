@@ -2,7 +2,7 @@ const express = require('express')
 // const mongoose = require('mongoose')
 // const dotenv = require('dotenv').config()
 const app = express()
-const port = 3000
+const port = 8000
 
 // mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true})
 // const db = mongoose.connection
