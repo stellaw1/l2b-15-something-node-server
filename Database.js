@@ -65,6 +65,9 @@ Database.prototype.postUser = function(user){
 				reject(new Error("invalid " + err + " property in given activity"));
 			}
 
+			// initialize friendship points to 0
+			user["friendship_points"] = 0;
+
 			const col = db.collection('users');
 				col.insertOne(user, function(err, res){
 					if(err){
