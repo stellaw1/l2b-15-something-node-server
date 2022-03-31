@@ -141,6 +141,38 @@ app.route("/friendship")
       res.status(400).send('empty request body found')
     }
   });
+  
+app.route("/game")
+  .get((req, res) => {
+    let data = req.body;
+
+    if (data) {
+      db.getGameData(data)
+        .then(results => {
+          console.log(results);
+          res.status(200).send(JSON.stringify(results))
+        }).catch(err => {
+          res.status(400).send(JSON.stringify(err))
+        });
+    } else {
+      res.status(400).send('empty request body found')
+    }
+  })
+  .post((req, res) => {
+    let data = req.body;
+
+    if (data) {
+      db.enterGameData(data)
+        .then(results => {
+          console.log(results);
+          res.status(200).send(JSON.stringify(results))
+        }).catch(err => {
+          res.status(400).send(JSON.stringify(err))
+        });
+    } else {
+      res.status(400).send('empty request body found')
+    }
+  });
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
