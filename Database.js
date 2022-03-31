@@ -269,10 +269,20 @@ Database.prototype.deleteFriendship = function(friendship){
 	)
 }
 
+function isGameType(game) {
+	if (!game.hasOwnProperty("sender_id") || typeof(game["sender_id"]) != "string") {
+		return "sender_id";
+	}
+	if (!game.hasOwnProperty("receiver_id") || typeof(game["receiver_id"]) != "string") {
+		return "receiver_id";
+	}
+	return null;
+}
+
 Database.prototype.enterGameData = function(data){
 	return this.connected.then(db =>
 		new Promise((resolve, reject) => {
-			if (err = isFriendshipType(data)) {
+			if (err = isGameType(data)) {
 				reject(new Error("invalid " + err + " property in given data object"));
 			}
 
@@ -321,7 +331,7 @@ Database.prototype.enterGameData = function(data){
 Database.prototype.getGameData = function(data){
 	return this.connected.then(db =>
 		new Promise((resolve, reject) => {
-			if (err = isFriendshipType(data)) {
+			if (err = isGameType(data)) {
 				reject(new Error("invalid " + err + " property in given data object"));
 			}
 
@@ -347,6 +357,36 @@ Database.prototype.getGameData = function(data){
 							resolve(res);
 						});
 				}
+			});
+		})
+	)
+}
+
+Database.prototype.deleteGameData = function(data){
+	return this.connected.then(db =>
+		new Promise((resolve, reject) => {
+			if (err = isFriendshipType(data)) {
+				reject(new Error("invalid " + err + " property in given data object"));
+			}
+
+			var query1 = {
+				user_id: data.user_id,
+				friend_id: data.friend_id
+			};
+			
+			var query2 = {
+				user_id: data.friend_id,
+				friend_id: data.user_id
+			};
+
+			var query = { $or: [ query1, query2 ] }
+			
+			const col = db.collection('game');
+			col.deleteOne(query, function(err, document) {
+				if (err) {
+					reject(err);
+				} 
+				resolve(document)
 			});
 		})
 	)
