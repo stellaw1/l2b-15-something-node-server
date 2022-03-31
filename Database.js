@@ -287,8 +287,8 @@ Database.prototype.enterGameData = function(data){
 			}
 
 			var query = {
-				user_id: data.friend_id,
-				friend_id: data.user_id
+				sender_id: data.receiver_id,
+				receiver_id: data.sender_id
 			};
 
 			const col = db.collection('game');
@@ -311,8 +311,8 @@ Database.prototype.enterGameData = function(data){
 						reject(new Error("invalid choice property in given data object"));
 					}
 					var data = {
-						user_id: data.user_id,
-						friend_id: data.friend_id,
+						sender_id: data.receiver_id,
+						receiver_id: data.sender_id,
 						user_choice: data.choice
 					};
 					
@@ -336,13 +336,13 @@ Database.prototype.getGameData = function(data){
 			}
 
 			var query1 = {
-				user_id: data.user_id,
-				friend_id: data.friend_id
+				sender_id: data.sender_id,
+				receiver_id: data.receiver_id
 			};
 
 			var query2 = {
-				user_id: data.friend_id,
-				friend_id: data.user_id
+				sender_id: data.receiver_id,
+				receiver_id: data.sender_id
 			};
 
 			const col = db.collection('game');
@@ -370,13 +370,13 @@ Database.prototype.deleteGameData = function(data){
 			}
 
 			var query1 = {
-				user_id: data.user_id,
-				friend_id: data.friend_id
+				sender_id: data.receiver_id,
+				receiver_id: data.sender_id
 			};
 			
 			var query2 = {
-				user_id: data.friend_id,
-				friend_id: data.user_id
+				sender_id: data.sender_id,
+				receiver_id: data.receiver_id
 			};
 
 			var query = { $or: [ query1, query2 ] }
