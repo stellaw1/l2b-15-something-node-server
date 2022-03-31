@@ -356,7 +356,7 @@ Database.prototype.getGameData = function(data){
 							if(err){
 								console.log(err);
 							}
-							resolve(res);
+							resolve(document);
 						});
 				}
 			});
