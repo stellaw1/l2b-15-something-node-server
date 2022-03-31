@@ -286,7 +286,6 @@ Database.prototype.enterGameData = function(data){
 				reject(new Error("invalid " + err + " property in given data object"));
 			}
 
-			console.log(data);
 
 			var query = {
 				sender_id: data.receiver_id,
@@ -295,7 +294,8 @@ Database.prototype.enterGameData = function(data){
 
 			const col = db.collection('game');
 			col.findOne(query, function(err, document) {
-				console.log(document)
+				console.log("query: ", query)
+				console.log("document: ", document)
 				if (document) {
 					if (!data.hasOwnProperty("choice") || typeof(data["choice"]) != "string") {
 						reject(new Error("invalid choice property in given data object"));
