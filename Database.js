@@ -286,6 +286,8 @@ Database.prototype.enterGameData = function(data){
 				reject(new Error("invalid " + err + " property in given data object"));
 			}
 
+			console.log(data);
+
 			var query = {
 				sender_id: data.receiver_id,
 				receiver_id: data.sender_id
@@ -310,13 +312,13 @@ Database.prototype.enterGameData = function(data){
 					if (!data.hasOwnProperty("choice") || typeof(data["choice"]) != "string") {
 						reject(new Error("invalid choice property in given data object"));
 					}
-					var data = {
+					var newdata = {
 						sender_id: data.receiver_id,
 						receiver_id: data.sender_id,
 						user_choice: data.choice
 					};
 					
-					col.insertOne(data, function(err, res){
+					col.insertOne(newdata, function(err, res){
 						if(err){
 							console.log(err);
 						}
