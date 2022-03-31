@@ -301,7 +301,7 @@ Database.prototype.enterGameData = function(data){
 						reject(new Error("invalid choice property in given data object"));
 					}
 
-					let newvalues = { friend_choice: data.choice };
+					let newvalues = { receiver_choice: data.choice };
 
 					col.updateOne(query, newvalues, function(err, res){
 						if(err){
@@ -316,7 +316,7 @@ Database.prototype.enterGameData = function(data){
 					var newdata = {
 						sender_id: data.receiver_id,
 						receiver_id: data.sender_id,
-						user_choice: data.choice
+						sender_choice: data.choice
 					};
 					
 					col.insertOne(newdata, function(err, res){
