@@ -314,8 +314,8 @@ Database.prototype.enterGameData = function(data){
 						reject(new Error("invalid choice property in given data object"));
 					}
 					var newdata = {
-						sender_id: data.receiver_id,
-						receiver_id: data.sender_id,
+						sender_id: data.sender_id,
+						receiver_id: data.receiver_id,
 						sender_choice: data.choice
 					};
 					
