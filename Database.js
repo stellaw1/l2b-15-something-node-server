@@ -295,6 +295,7 @@ Database.prototype.enterGameData = function(data){
 
 			const col = db.collection('game');
 			col.findOne(query, function(err, document) {
+				console.log(document)
 				if (document) {
 					if (!data.hasOwnProperty("choice") || typeof(data["choice"]) != "string") {
 						reject(new Error("invalid choice property in given data object"));
