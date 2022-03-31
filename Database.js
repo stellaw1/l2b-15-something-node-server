@@ -294,14 +294,13 @@ Database.prototype.enterGameData = function(data){
 
 			const col = db.collection('game');
 			col.findOne(query, function(err, document) {
-				console.log("query: ", query)
-				console.log("document: ", document)
 				if (document) {
 					if (!data.hasOwnProperty("choice") || typeof(data["choice"]) != "string") {
 						reject(new Error("invalid choice property in given data object"));
 					}
 
-					let newvalues = { receiver_choice: data.choice };
+					let val = { receiver_choice: data.choice };
+					let newvalues = { $set: val };
 
 					col.updateOne(query, newvalues, function(err, res){
 						if(err){
