@@ -42,15 +42,16 @@ app.route("/user")
         if (results && results.hasOwnProperty("pet_colour")) {
           res.status(200).send(JSON.stringify(results.pet_colour));
         } else {
-          res.status(400).send("user not found");
+          console.log("user not found");
+          res.sendStatus(400);
         }
       }).catch(err => {
         console.log(err);
-        res.sendStatus(400).send("user not found");
+        res.sendStatus(400);
       });;
     } else {
       console.log('empty request body found');
-      res.status(400);
+      res.sendStatus(400);
     }
   })
   /*
