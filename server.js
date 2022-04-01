@@ -132,6 +132,28 @@ app.route("/chat")
     }
   });
 
+/*
+ * Checks whether friend_id is a friend of user_id
+ *
+ * @param string user_id
+ * @param string friend_id
+ * @return 
+ */
+app.route('/isFriends')
+  .get((req, res) => {
+    let data = req.query;
+
+    if (user) {
+    db.getIsFriends(data)
+      .then(results => {
+        console.log(results);
+        res.status(200).send(JSON.stringify(results));
+      });
+    } else {
+      res.sendStatus(400)
+    }
+  })
+
 app.route("/friendship")
   .get((req, res) => {
     let user = req.query;

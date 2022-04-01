@@ -1,5 +1,59 @@
 const { MongoClient, AbstractCursor } = require('mongodb');	// require the mongodb driver
 
+/*
+ * HELPER FUNCTIONS
+ */
+
+function isUserType(user) {
+	if (!user.hasOwnProperty("username") || typeof(user["username"]) != "string") {
+		return "username";
+	}
+	if (!user.hasOwnProperty("pet_colour") || typeof(user["pet_colour"]) != "string") {
+		return "pet_colour";
+	}
+	return null;
+}
+
+function isFriendshipType(friendship) {
+	if (!friendship.hasOwnProperty("user_id") || typeof(friendship["user_id"]) != "string") {
+		return "user_id";
+	}
+	if (!friendship.hasOwnProperty("friend_id") || typeof(friendship["friend_id"]) != "string") {
+		return "friend_id";
+	}
+	return null;
+}
+
+function isUsersType(users) {
+	if (!users.hasOwnProperty("sender_id") || typeof(users["sender_id"]) != "string") {
+		return "sender_id";
+	}
+	if (!users.hasOwnProperty("receiver_id") || typeof(users["receiver_id"]) != "string") {
+		return "receiver_id";
+	}
+	return null;
+}
+
+function isChatType(chat) {
+	if (err = isUsersType(chat)) {
+		return err;
+	}
+	if (!chat.hasOwnProperty("message") || typeof(chat["message"]) != "string") {
+		return "message";
+	}
+	return null;
+}
+
+function isGameType(game) {
+	if (!game.hasOwnProperty("sender_id") || typeof(game["sender_id"]) != "string") {
+		return "sender_id";
+	}
+	if (!game.hasOwnProperty("receiver_id") || typeof(game["receiver_id"]) != "string") {
+		return "receiver_id";
+	}
+	return null;
+}
+
 /**
  * Uses mongodb v3.6+ - [API Documentation](http://mongodb.github.io/node-mongodb-native/3.6/api/)
  * Database wraps a mongoDB connection to provide a higher-level abstraction layer
@@ -62,16 +116,6 @@ Database.prototype.getUserByUsername = function(username){
 	)
 }
 
-function isUserType(user) {
-	if (!user.hasOwnProperty("username") || typeof(user["username"]) != "string") {
-		return "username";
-	}
-	if (!user.hasOwnProperty("pet_colour") || typeof(user["pet_colour"]) != "string") {
-		return "pet_colour";
-	}
-	return null;
-}
-
 Database.prototype.postUser = function(user){
 	return this.connected.then(db =>
 		new Promise((resolve, reject) => {
@@ -123,15 +167,6 @@ Database.prototype.incrementFriendship = function(username){
 	)
 }
 
-function isUsersType(users) {
-	if (!users.hasOwnProperty("sender_id") || typeof(users["sender_id"]) != "string") {
-		return "sender_id";
-	}
-	if (!users.hasOwnProperty("receiver_id") || typeof(users["receiver_id"]) != "string") {
-		return "receiver_id";
-	}
-	return null;
-}
 
 Database.prototype.getChatHistory = function(users){
 	return this.connected.then(db =>
@@ -157,15 +192,6 @@ Database.prototype.getChatHistory = function(users){
 	)
 }
 
-function isChatType(chat) {
-	if (err = isUsersType(chat)) {
-		return err;
-	}
-	if (!chat.hasOwnProperty("message") || typeof(chat["message"]) != "string") {
-		return "message";
-	}
-	return null;
-}
 
 Database.prototype.postChat = function(chat){
 	return this.connected.then(db =>
@@ -193,6 +219,35 @@ Database.prototype.postChat = function(chat){
 	)
 }
 
+Database.prototype.getIsFriends = function(data){
+	return this.connected.then(db =>
+		new Promise((resolve, reject) => {
+			
+			let err;
+			if (err = isFriendshipType(data)) {
+				reject(new Error("invalid " + err + " property in given friendship object"));
+			}
+
+			var query = { user_id: user.user_id };
+			
+			const col = db.collection('friendships');
+			col.find(query).toArray(function(err, items) {
+				if (err) {
+					reject(err);
+				}
+
+				items.forEach(item => {return item.friend_id});
+				
+				if (data.friend_id in items) { 
+					resolve("friends");
+				} else {
+					resolve("");
+				}
+			});
+		})
+	)
+}
+
 Database.prototype.getFriendsForUser = function(user){
 	return this.connected.then(db =>
 		new Promise((resolve, reject) => {
@@ -208,26 +263,21 @@ Database.prototype.getFriendsForUser = function(user){
 				if (err) {
 					reject(err);
 				}
+
+				items.forEach(item => {return item.friend_id});
+
 				resolve(items);
 			});
 		})
 	)
 }
 
-function isFriendshipType(friendship) {
-	if (!friendship.hasOwnProperty("user_id") || typeof(friendship["user_id"]) != "string") {
-		return "user_id";
-	}
-	if (!friendship.hasOwnProperty("friend_id") || typeof(friendship["friend_id"]) != "string") {
-		return "friend_id";
-	}
-	return null;
-}
 
 Database.prototype.postFriendship = function(friendship){
 	return this.connected.then(db =>
 		new Promise((resolve, reject) => {
 
+			let err;
 			if (err = isFriendshipType(friendship)) {
 				reject(new Error("invalid " + err + " property in given friendship object"));
 			}
@@ -271,15 +321,6 @@ Database.prototype.deleteFriendship = function(friendship){
 	)
 }
 
-function isGameType(game) {
-	if (!game.hasOwnProperty("sender_id") || typeof(game["sender_id"]) != "string") {
-		return "sender_id";
-	}
-	if (!game.hasOwnProperty("receiver_id") || typeof(game["receiver_id"]) != "string") {
-		return "receiver_id";
-	}
-	return null;
-}
 
 Database.prototype.getGameData = function(data){
 	return this.connected.then(db =>
