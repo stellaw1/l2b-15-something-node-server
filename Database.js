@@ -48,7 +48,9 @@ Database.prototype.getUserByUsername = function(username){
 		new Promise((resolve, reject) => {
 			const col = db.collection('users');
 
-			col.findOne({username: username}, function(err, document) {
+			let query = username.username;
+
+			col.findOne({username: query}, function(err, document) {
 				if (err) {
 					reject(err);
 				}

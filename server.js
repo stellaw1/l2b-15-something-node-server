@@ -21,7 +21,7 @@ app.route("/users")
 
 app.route("/user")
   .get((req, res) => {
-    let username = req.query.username;
+    let username = req.query;
 
     if (username) {
     db.getUserByUsername(username)
@@ -69,7 +69,7 @@ app.route("/increment")
 
 app.route("/chat")
   .get((req, res) => {
-    let users = req.body;
+    let users = req.query;
 
     if (users) {
     db.getChatHistory(users)
@@ -99,7 +99,7 @@ app.route("/chat")
 
 app.route("/friendship")
   .get((req, res) => {
-    let user = req.body;
+    let user = req.querys;
 
     if (user) {
     db.getFriendsForUser(user)
