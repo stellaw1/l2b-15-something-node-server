@@ -39,7 +39,11 @@ app.route("/user")
     db.getUserByUsername(username)
       .then(results => {
         console.log(results);
-        res.status(200).send(JSON.stringify(results.pet_colour));
+        if (results.hasOwnProperty("pet_colour")) {
+          res.status(200).send(JSON.stringify(results.pet_colour));
+        } else {
+          res.status(400).send("user not found");
+        }
       });
     } else {
       console.log('empty request body found');
