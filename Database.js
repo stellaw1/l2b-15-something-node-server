@@ -376,16 +376,21 @@ Database.prototype.deleteGameData = function(data){
 				sender_id: data.sender_id,
 				receiver_id: data.receiver_id
 			};
-
-			var query = { $or: [ query1, query2 ] }
 			
 			const col = db.collection('game');
-			col.deleteOne(query, function(err, document) {
-				if (err) {
-					reject(err);
+			col.deleteOne(query1, function(err, document) {
+				console.log(document)
+				if (document) {
+					resolve(document)
 				} 
-				resolve(document)
+				col.deleteOne(query2, function(err, document) {
+					if (err) {
+						reject(err);
+					} 
+					resolve(document)
+				});
 			});
+			
 		})
 	)
 }
