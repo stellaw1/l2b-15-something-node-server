@@ -10,6 +10,11 @@ app.use(express.json());
 app.use(express.urlencoded());
 
 
+/*
+ * get list of all users and their friendship points
+ *
+ * @return Array<{string username, int friendship_points}>
+ */
 app.route("/users")
   .get((req, res) => {
     db.getAllUsers()
@@ -19,6 +24,13 @@ app.route("/users")
       });
   });
 
+
+  /*
+   * get pet colour for one user
+   *
+   * @param string username
+   * @return int pet_colour
+   */
 app.route("/user")
   .get((req, res) => {
     let username = req.query;
@@ -33,6 +45,11 @@ app.route("/user")
       res.status(400).send('empty request body found')
     }
   })
+  /*
+   * post new user
+   *
+   * @param {string username, int pet_colour}
+   */
   .post((req, res) => {
     let user = req.body;
     console.log(req);
@@ -50,6 +67,12 @@ app.route("/user")
     }
   });
 
+/*
+ * increment user friendship_points by 1
+ *
+ * @param string username
+ * @return int 1 if user modified, 0 if nothing changed
+ */
 app.route("/increment")
   .post((req, res) => {
     let user = req.body;
@@ -58,12 +81,14 @@ app.route("/increment")
       db.incrementFriendship(user)
         .then(results => {
           console.log(results);
-          res.status(200).send(JSON.stringify(results))
+          res.status(200).send(JSON.stringify("1"));
         }).catch(err => {
-          res.status(400).send(JSON.stringify(err))
+          console.log(err)
+          res.sendStatus(400);
         });
     } else {
-      res.status(400).send('empty request body found')
+      console.log('empty request body found');
+      res.sendStatus(400);
     }
   });
 
