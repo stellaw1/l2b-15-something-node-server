@@ -21,7 +21,7 @@ app.route("/users")
 
 app.route("/user")
   .get((req, res) => {
-    let username = req.params.username;
+    let username = req.query.username;
 
     if (username) {
     db.getUserByUsername(username)
