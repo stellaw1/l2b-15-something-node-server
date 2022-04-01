@@ -81,7 +81,7 @@ app.route("/increment")
       db.incrementFriendship(user)
         .then(results => {
           console.log(results);
-          res.status(200).send(JSON.stringify("1"));
+          res.status(200).send(JSON.stringify(results.modifiedCount));
         }).catch(err => {
           console.log(err)
           res.sendStatus(400);

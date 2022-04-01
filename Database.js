@@ -95,7 +95,7 @@ Database.prototype.postUser = function(user){
 	)
 }
 
-Database.prototype.incrementFriendship = function(username, activity){
+Database.prototype.incrementFriendship = function(username){
 	return this.connected.then(db =>
 		new Promise((resolve, reject) => {
 			
