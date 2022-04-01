@@ -239,7 +239,7 @@ Database.prototype.getIsFriends = function(data){
 				items.forEach((item, i) => {items[i] = item.friend_id});
 				console.log(items);
 
-				if (data.friend_id in items) { 
+				if (items.includes(data.friend_id)) { 
 					resolve("friends");
 				} else {
 					resolve("");
