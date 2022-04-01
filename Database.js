@@ -37,6 +37,8 @@ Database.prototype.getAllUsers = function(){
 						reject(err);
 					}
 
+					items.forEach(item => { return {username: item.username, friendship_points: item.friendship_points}});
+
 					resolve(items);
 				});
 		})
