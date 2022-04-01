@@ -99,7 +99,7 @@ app.route("/chat")
 
 app.route("/friendship")
   .get((req, res) => {
-    let user = req.querys;
+    let user = req.query;
 
     if (user) {
     db.getFriendsForUser(user)
