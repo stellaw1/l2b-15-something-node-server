@@ -236,7 +236,7 @@ Database.prototype.getIsFriends = function(data){
 					reject(err);
 				}
 
-				items.forEach((item, i) => {items[i] = item.friend_id);
+				items.forEach((item, i) => {items[i] = item.friend_id});
 
 				if (data.friend_id in items) { 
 					resolve("friends");
