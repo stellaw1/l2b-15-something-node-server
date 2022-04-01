@@ -380,7 +380,7 @@ Database.prototype.deleteGameData = function(data){
 			const col = db.collection('game');
 			col.deleteOne(query1, function(err, document) {
 				console.log(document)
-				if (document) {
+				if (document.deletedCount) {
 					resolve(document)
 				} 
 				col.deleteOne(query2, function(err, document) {
