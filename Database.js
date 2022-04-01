@@ -279,6 +279,40 @@ function isGameType(game) {
 	return null;
 }
 
+Database.prototype.getGameData = function(data){
+	return this.connected.then(db =>
+		new Promise((resolve, reject) => {
+			if (err = isGameType(data)) {
+				reject(new Error("invalid " + err + " property in given data object"));
+			}
+
+			var query1 = {
+				sender_id: data.sender_id,
+				receiver_id: data.receiver_id
+			};
+
+			var query2 = {
+				sender_id: data.receiver_id,
+				receiver_id: data.sender_id
+			};
+
+			const col = db.collection('game');
+			col.findOne(query1, function(err, document) {
+				if (document) {
+					resolve(document);
+				} else {
+					col.findOne(query2, function(err, document) {
+							if(err){
+								console.log(err);
+							}
+							resolve(document);
+						});
+				}
+			});
+		})
+	)
+}
+
 Database.prototype.enterGameData = function(data){
 	return this.connected.then(db =>
 		new Promise((resolve, reject) => {
@@ -324,40 +358,6 @@ Database.prototype.enterGameData = function(data){
 						}
 						resolve(res);
 					});
-				}
-			});
-		})
-	)
-}
-
-Database.prototype.getGameData = function(data){
-	return this.connected.then(db =>
-		new Promise((resolve, reject) => {
-			if (err = isGameType(data)) {
-				reject(new Error("invalid " + err + " property in given data object"));
-			}
-
-			var query1 = {
-				sender_id: data.sender_id,
-				receiver_id: data.receiver_id
-			};
-
-			var query2 = {
-				sender_id: data.receiver_id,
-				receiver_id: data.sender_id
-			};
-
-			const col = db.collection('game');
-			col.findOne(query1, function(err, document) {
-				if (document) {
-					resolve(document);
-				} else {
-					col.findOne(query2, function(err, document) {
-							if(err){
-								console.log(err);
-							}
-							resolve(document);
-						});
 				}
 			});
 		})

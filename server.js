@@ -144,7 +144,7 @@ app.route("/friendship")
   
 app.route("/game")
   .get((req, res) => {
-    let data = req.body;
+    let data = req.query;
 
     if (data) {
       db.getGameData(data)
