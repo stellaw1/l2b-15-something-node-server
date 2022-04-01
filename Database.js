@@ -195,18 +195,18 @@ Database.prototype.getFriendsForUser = function(user){
 	return this.connected.then(db =>
 		new Promise((resolve, reject) => {
 			
-			if (!user.hasOwnProperty("username") || typeof(user["username"]) != "string") {
+			if (!user.hasOwnProperty("user_id") || typeof(user["user_id"]) != "string") {
 				reject(new Error("invalid username property in given user object"));
 			}
 
-			var query = { user_id: user.username };
+			var query = { user_id: user.user_id };
 			
 			const col = db.collection('friendships');
-			col.find(query, function(err, res){
-				if(err){
-					console.log(err);
+			col.find(query).toArray(function(err, items) {
+				if (err) {
+					reject(err);
 				}
-				resolve(res);
+				resolve(items);
 			});
 		})
 	)
