@@ -39,10 +39,11 @@ app.route("/user")
     db.getUserByUsername(username)
       .then(results => {
         console.log(results);
-        res.status(200).send(JSON.stringify(results));
+        res.status(200).send(JSON.stringify(results.pet_colour));
       });
     } else {
-      res.status(400).send('empty request body found')
+      console.log('empty request body found');
+      res.status(400);
     }
   })
   /*
@@ -58,12 +59,13 @@ app.route("/user")
       db.postUser(user)
         .then(results => {
           console.log(results);
-          res.status(200).send(JSON.stringify(results))
+          res.sendStatus(200);
         }).catch(err => {
-          res.status(400).send(JSON.stringify(err))
+          res.sendStatus(400);
         });
     } else {
-      res.status(400).send('empty request body found')
+      console.log('empty request body found');
+      res.sendStatus(400);
     }
   });
 
