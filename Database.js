@@ -195,8 +195,8 @@ Database.prototype.getFriendsForUser = function(user){
 	return this.connected.then(db =>
 		new Promise((resolve, reject) => {
 			
-			if (!user.hasOwnProperty("user_id") || typeof(user["user_id"]) != "string") {
-				reject(new Error("invalid user_id property in given user object"));
+			if (!user.hasOwnProperty("username") || typeof(user["username"]) != "string") {
+				reject(new Error("invalid username property in given user object"));
 			}
 
 			var query = { user_id: user.username };
