@@ -228,7 +228,7 @@ Database.prototype.getIsFriends = function(data){
 				reject(new Error("invalid " + err + " property in given friendship object"));
 			}
 
-			var query = { user_id: user.user_id };
+			var query = { user_id: data.user_id };
 			
 			const col = db.collection('friendships');
 			col.find(query).toArray(function(err, items) {
