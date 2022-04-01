@@ -19,7 +19,7 @@ app.route("/users")
       });
   });
 
-app.route("/user/:username")
+app.route("/user")
   .get((req, res) => {
     let username = req.params.username;
 
