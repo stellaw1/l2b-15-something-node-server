@@ -127,7 +127,7 @@ app.route("/friendship")
     }
   })
   .delete((req, res) => {
-    let friendship = req.body;
+    let friendship = req.query;
 
     if (friendship) {
       db.deleteFriendship(friendship)
