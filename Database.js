@@ -296,18 +296,14 @@ Database.prototype.getGameData = function(data){
 				receiver_id: data.sender_id
 			};
 
+			var query = { $or: [ query1, query2 ] }
+
 			const col = db.collection('game');
-			col.findOne(query1, function(err, document) {
-				if (document) {
-					resolve(document);
-				} else {
-					col.findOne(query2, function(err, document) {
-							if(err){
-								console.log(err);
-							}
-							resolve(document);
-						});
+			col.findOne(query, function(err, document) {
+				if (err) {
+					reject(err);
 				}
+				resolve(document);
 			});
 		})
 	)
