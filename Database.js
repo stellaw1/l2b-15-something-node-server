@@ -379,18 +379,12 @@ Database.prototype.deleteGameData = function(data){
 			
 			const col = db.collection('game');
 			col.deleteOne(query1, function(err, document) {
-				console.log(document)
-				console.log(document.deletedCount)
-				if (document.deletedCount > 0) {
+				col.deleteOne(query2, function(err, document) {
+					if (err) {
+						reject(err);
+					} 
 					resolve(document)
-				} else {
-					col.deleteOne(query2, function(err, document) {
-						if (err) {
-							reject(err);
-						} 
-						resolve(document)
-					});
-				}
+				});
 			});
 			
 		})
