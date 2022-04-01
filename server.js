@@ -143,7 +143,7 @@ app.route('/isFriends')
   .get((req, res) => {
     let data = req.query;
 
-    if (user) {
+    if (data) {
     db.getIsFriends(data)
       .then(results => {
         console.log(results);
