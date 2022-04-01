@@ -174,7 +174,7 @@ app.route("/game")
     }
   })
   .delete((req, res) => {
-    let data = req.body;
+    let data = req.query;
 
     if (data) {
       db.deleteGameData(data)
