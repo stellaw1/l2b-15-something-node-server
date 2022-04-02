@@ -352,13 +352,16 @@ app.route("/weather")
       res.sendStatus(400);
     }
     else{
-      var weather = {};
+      var data = [];
       try {
-        weather = currentWeather.weather[0].main;
+        data.push(currentWeather.weather[0].main);
+        data.push(Math.round(currentWeather.main.temp));
       } catch (e) {
-        weather = "Sunny";
+        data = [];
+        data["weather"] = "Sunny";
+        data["temperature"] = "20";
       }
-      res.status(200).send(weather);
+      res.status(200).send(data);
     }
   });
 });
