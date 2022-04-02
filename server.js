@@ -103,6 +103,13 @@ app.route("/increment")
     }
   });
 
+/*
+ * get chat history for 2 users
+ *
+ * @param string sender_id
+ * @param string receiver_id
+ * @return Array<{sender_id: sender_id, receiver_id: receiver_id, message: message, time: time}>
+ */
 app.route("/chat")
   .get((req, res) => {
     let users = req.query;
@@ -118,6 +125,14 @@ app.route("/chat")
       res.sendStatus(400);
     }
   })
+  /*
+   * post new chat message
+   *
+   * @param string sender_id
+   * @param string receiver_id
+   * @param string message
+   * @return string "posted" on success and "" on failure
+   */
   .post((req, res) => {
     let chat = req.body;
 
@@ -125,7 +140,7 @@ app.route("/chat")
       db.postChat(chat)
         .then(results => {
           console.log(results);
-          res.status(200).send(JSON.stringify(results))
+          res.status(200).send("posted");
         }).catch(err => {
           console.log(err)
           res.sendStatus(400);
@@ -141,7 +156,7 @@ app.route("/chat")
  *
  * @param string user_id
  * @param string friend_id
- * @return 
+   * @return string "friends" if friends, "" otherwise
  */
 app.route('/isFriends')
   .get((req, res) => {
@@ -159,6 +174,13 @@ app.route('/isFriends')
     }
   })
 
+/*
+ * Checks whether friend_id is a friend of user_id
+ *
+ * @param string user_id
+ * @param string friend_id
+ * @return string "friends" if friends, "" otherwise
+ */
 app.route("/friendship")
   .get((req, res) => {
     let user = req.query;

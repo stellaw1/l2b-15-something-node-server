@@ -252,7 +252,6 @@ Database.prototype.getIsFriends = function(data){
 						}
 		
 						items.forEach((item, i) => {items[i] = item.friend_id});
-						console.log(items);
 		
 						if (items.includes(data.user_id)) { 
 							resolve("friends");
@@ -282,7 +281,7 @@ Database.prototype.getFriendsForUser = function(user){
 					reject(err);
 				}
 
-				items.forEach(item => {return item.friend_id});
+				items.forEach((item, i) => {item[i] = item.friend_id});
 
 				resolve(items);
 			});
