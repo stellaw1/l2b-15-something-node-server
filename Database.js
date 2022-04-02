@@ -281,7 +281,7 @@ Database.prototype.getFriendsForUser = function(user){
 					reject(err);
 				}
 
-				items.forEach((item, i) => {item[i] = item.friend_id});
+				items.forEach((item, i) => {items[i] = item.friend_id});
 
 				resolve(items);
 			});
