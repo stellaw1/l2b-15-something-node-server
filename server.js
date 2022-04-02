@@ -276,6 +276,14 @@ app.route("/game")
       res.sendStatus(400);
     }
   })
+  /*
+  * Post game data
+  *
+  * @param string sender_id
+  * @param string receiver_id
+  * @param string choice
+  * @return string "posted" on success and "" on failure
+  */
   .post((req, res) => {
     let data = req.body;
 
@@ -283,7 +291,7 @@ app.route("/game")
       db.enterGameData(data)
         .then(results => {
           console.log(results);
-          res.status(200).send(JSON.stringify(results))
+          res.status(200).send("posted")
         }).catch(err => {
           console.log(err)
           res.sendStatus(400);
@@ -293,6 +301,13 @@ app.route("/game")
       res.sendStatus(400);
     }
   })
+  /*
+  * Delete game data
+  *
+  * @param string sender_id
+  * @param string receiver_id
+  * @return string "deleted" on success and "" on failure
+  */
   .delete((req, res) => {
     let data = req.query;
 
@@ -300,7 +315,7 @@ app.route("/game")
       db.deleteGameData(data)
         .then(results => {
           console.log(results);
-          res.status(200).send(JSON.stringify(results))
+          res.status(200).send("deleted")
         }).catch(err => {
           console.log(err)
           res.sendStatus(400);

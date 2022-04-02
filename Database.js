@@ -423,7 +423,7 @@ Database.prototype.enterGameData = function(data){
 Database.prototype.deleteGameData = function(data){
 	return this.connected.then(db =>
 		new Promise((resolve, reject) => {
-			if (err = isFriendshipType(data)) {
+			if (err = isGameType(data)) {
 				reject(new Error("invalid " + err + " property in given data object"));
 			}
 
