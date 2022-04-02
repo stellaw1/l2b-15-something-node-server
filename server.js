@@ -316,7 +316,7 @@ app.route("/game")
         .then(results => {
           console.log(results);
           if (results) {
-            res.status(200).send(results.deletedCount);
+            res.status(200).send(JSON.stringify(results.deletedCount));
           } else {
             res.sendStatus(400);
           }
