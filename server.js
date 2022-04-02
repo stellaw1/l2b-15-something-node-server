@@ -36,7 +36,7 @@ app.route("/user")
     let username = req.query;
 
     if (username) {
-    db.getUserByUsername(username)
+    db.getColourByUsername(username)
       .then(results => {
         console.log(results);
         if (results && results.hasOwnProperty("pet_colour")) {
@@ -58,6 +58,7 @@ app.route("/user")
    * post new user
    *
    * @param {string username, int pet_colour}
+   * @return string "posted" on success and "" on failure
    */
   .post((req, res) => {
     let user = req.body;
@@ -67,7 +68,7 @@ app.route("/user")
       db.postUser(user)
         .then(results => {
           console.log(results);
-          res.sendStatus(200);
+          res.sendStatus(200).send("posted");
         }).catch(err => {
           res.sendStatus(400);
         });
@@ -113,7 +114,8 @@ app.route("/chat")
         res.status(200).send(JSON.stringify(results));
       });
     } else {
-      res.status(400).send('empty request body found')
+      console.log('empty request body found');
+      res.sendStatus(400);
     }
   })
   .post((req, res) => {
@@ -125,10 +127,12 @@ app.route("/chat")
           console.log(results);
           res.status(200).send(JSON.stringify(results))
         }).catch(err => {
-          res.status(400).send(JSON.stringify(err))
+          console.log(err)
+          res.sendStatus(400);
         });
     } else {
-      res.status(400).send('empty request body found')
+      console.log('empty request body found');
+      res.sendStatus(400);
     }
   });
 
@@ -144,13 +148,14 @@ app.route('/isFriends')
     let data = req.query;
 
     if (data) {
-    db.getIsFriends(data)
-      .then(results => {
-        console.log(results);
-        res.status(200).send(JSON.stringify(results));
-      });
+      db.getIsFriends(data)
+        .then(results => {
+          console.log(results);
+          res.status(200).send(JSON.stringify(results));
+        });
     } else {
-      res.sendStatus(400)
+      console.log('empty query body found');
+      res.sendStatus(400);
     }
   })
 
@@ -165,7 +170,8 @@ app.route("/friendship")
         res.status(200).send(JSON.stringify(results));
       });
     } else {
-      res.status(400).send('empty request body found')
+      console.log('empty request body found');
+      res.sendStatus(400);
     }
   })
   .post((req, res) => {
@@ -177,10 +183,12 @@ app.route("/friendship")
           console.log(results);
           res.status(200).send(JSON.stringify(results))
         }).catch(err => {
-          res.status(400).send(JSON.stringify(err))
+          console.log(err)
+          res.sendStatus(400);
         });
     } else {
-      res.status(400).send('empty request body found')
+      console.log('empty request body found');
+      res.sendStatus(400);
     }
   })
   .delete((req, res) => {
@@ -192,10 +200,12 @@ app.route("/friendship")
           console.log(results);
           res.status(200).send(JSON.stringify(results))
         }).catch(err => {
-          res.status(400).send(JSON.stringify(err))
+          console.log(err)
+          res.sendStatus(400);
         });
     } else {
-      res.status(400).send('empty request body found')
+      console.log('empty request body found');
+      res.sendStatus(400);
     }
   });
   
@@ -209,10 +219,12 @@ app.route("/game")
           console.log(results);
           res.status(200).send(JSON.stringify(results))
         }).catch(err => {
-          res.status(400).send(JSON.stringify(err))
+          console.log(err)
+          res.sendStatus(400);
         });
     } else {
-      res.status(400).send('empty request body found')
+      console.log('empty request body found');
+      res.sendStatus(400);
     }
   })
   .post((req, res) => {
@@ -224,10 +236,12 @@ app.route("/game")
           console.log(results);
           res.status(200).send(JSON.stringify(results))
         }).catch(err => {
-          res.status(400).send(JSON.stringify(err))
+          console.log(err)
+          res.sendStatus(400);
         });
     } else {
-      res.status(400).send('empty request body found')
+      console.log('empty request body found');
+      res.sendStatus(400);
     }
   })
   .delete((req, res) => {
@@ -239,10 +253,12 @@ app.route("/game")
           console.log(results);
           res.status(200).send(JSON.stringify(results))
         }).catch(err => {
-          res.status(400).send(JSON.stringify(err))
+          console.log(err)
+          res.sendStatus(400);
         });
     } else {
-      res.status(400).send('empty request body found')
+      console.log('empty request body found');
+      res.sendStatus(400);
     }
   });
 

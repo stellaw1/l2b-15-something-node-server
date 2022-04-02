@@ -99,7 +99,7 @@ Database.prototype.getAllUsers = function(){
 	)
 }
 
-Database.prototype.getUserByUsername = function(username){
+Database.prototype.getColourByUsername = function(username){
 	return this.connected.then(db =>
 		new Promise((resolve, reject) => {
 			const col = db.collection('users');
@@ -186,6 +186,9 @@ Database.prototype.getChatHistory = function(users){
 					if (err) {
 						reject(err);
 					}
+
+					items.forEach((item, i) => { items[i] = {sender_id: item.sender_id, receiver_id: item.receiver_id, message: item.message, time: item.time}});
+					
 					resolve(items);
 				});
 		})
