@@ -259,13 +259,13 @@ app.route("/game")
       db.getGameData(data)
         .then(results => {
           if (results) {
-            let res;
+            let response;
             if (data.sender_id === results.sender_id) {
-              res = {sender_choice: results.sender_choice, receiver_choice: results.receiver_choice}
+              response = {sender_choice: results.sender_choice, receiver_choice: results.receiver_choice}
             } else {
-              res = {sender_choice: results.receiver_choice, receiver_choice: results.sender_choice}
+              response = {sender_choice: results.receiver_choice, receiver_choice: results.sender_choice}
             }
-            res.status(200).send(JSON.stringify(res))
+            res.status(200).send(JSON.stringify(response))
           }
         }).catch(err => {
           console.log(err)
