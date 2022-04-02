@@ -1,7 +1,16 @@
 const express = require("express");
 const Database = require('./Database.js');
+const OpenWeatherMapHelper = require("openweathermap-node");
 
-var db = Database("mongodb+srv://admin:spycatadmin@cluster0.p2llx.mongodb.net/database?retryWrites=true&w=majority", "database");
+const db = Database("mongodb+srv://admin:spycatadmin@cluster0.p2llx.mongodb.net/database?retryWrites=true&w=majority", "database");
+const weatherHelper = new OpenWeatherMapHelper(
+	{
+		APPID: '9e12875a014e100a631a56a3b16f74c9',
+		units: "metric",
+		lang: "en"
+	}
+);
+
 
 const app = express();
 const port = 8000;
@@ -329,6 +338,30 @@ app.route("/game")
       res.sendStatus(400);
     }
   });
+
+
+/*
+ * Get weather
+ *
+ * @return string "posted" on success and "" on failure
+ */
+app.route("/weather")
+.get((req, res) => {
+  weatherHelper.getCurrentWeatherByCityName("Vancouver", (err, currentWeather) => {
+    if(err){
+      res.sendStatus(400);
+    }
+    else{
+      var weather = {};
+      try {
+        weather = currentWeather.weather[0].main;
+      } catch (e) {
+        weather = "Sunny";
+      }
+      res.status(200).send(weather);
+    }
+  });
+});
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
