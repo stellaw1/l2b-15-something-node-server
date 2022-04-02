@@ -315,7 +315,11 @@ app.route("/game")
       db.deleteGameData(data)
         .then(results => {
           console.log(results);
-          res.status(200).send("deleted")
+          if (results) {
+            res.status(200).send(results.deletedCount);
+          } else {
+            res.sendStatus(400);
+          }
         }).catch(err => {
           console.log(err)
           res.sendStatus(400);
