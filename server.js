@@ -156,7 +156,7 @@ app.route("/chat")
  *
  * @param string user_id
  * @param string friend_id
-   * @return string "friends" if friends, "" otherwise
+ * @return string "friends" if friends, "" otherwise
  */
 app.route('/isFriends')
   .get((req, res) => {
@@ -175,11 +175,10 @@ app.route('/isFriends')
   })
 
 /*
- * Checks whether friend_id is a friend of user_id
+ * Gets list of friends for a user
  *
  * @param string user_id
- * @param string friend_id
- * @return string "friends" if friends, "" otherwise
+ * @return Array<string> of friends
  */
 app.route("/friendship")
   .get((req, res) => {
@@ -196,6 +195,13 @@ app.route("/friendship")
       res.sendStatus(400);
     }
   })
+  /*
+   * Post new friendship
+   *
+   * @param string user_id
+   * @param string friend_id
+   * @return string "posted" on success and "" on failure
+   */
   .post((req, res) => {
     let friendship = req.body;
 
@@ -203,7 +209,7 @@ app.route("/friendship")
       db.postFriendship(friendship)
         .then(results => {
           console.log(results);
-          res.status(200).send(JSON.stringify(results))
+          res.status(200).send("posted")
         }).catch(err => {
           console.log(err)
           res.sendStatus(400);
@@ -213,6 +219,13 @@ app.route("/friendship")
       res.sendStatus(400);
     }
   })
+  /*
+   * Delete a friendship
+   *
+   * @param string user_id
+   * @param string friend_id
+   * @return string "deleted" on success and "" on failure
+   */
   .delete((req, res) => {
     let friendship = req.query;
 
@@ -230,7 +243,14 @@ app.route("/friendship")
       res.sendStatus(400);
     }
   });
-  
+
+/*
+ * Get game data
+ *
+ * @param string sender_id
+ * @param string receiver_id
+ * @return string "posted" on success and "" on failure
+ */
 app.route("/game")
   .get((req, res) => {
     let data = req.query;
@@ -238,8 +258,15 @@ app.route("/game")
     if (data) {
       db.getGameData(data)
         .then(results => {
-          console.log(results);
-          res.status(200).send(JSON.stringify(results))
+          if (results) {
+            let res;
+            if (data.sender_id === results.sender_id) {
+              res = {sender_choice: results.sender_choice, receiver_choice: results.receiver_choice}
+            } else {
+              res = {sender_choice: results.receiver_choice, receiver_choice: results.sender_choice}
+            }
+            res.status(200).send(JSON.stringify(res))
+          }
         }).catch(err => {
           console.log(err)
           res.sendStatus(400);
