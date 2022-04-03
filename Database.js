@@ -187,9 +187,13 @@ Database.prototype.getChatHistory = function(users){
 						reject(err);
 					}
 
+					if (items.length == 0) {
+						resolve("");
+					}
+
 					items.forEach((item, i) => { items[i] = {sender_id: item.sender_id, receiver_id: item.receiver_id, message: item.message, time: item.time}});
-					
-					resolve(items);
+					items.sort((item) => -item.time);
+					resolve(items[0].message);
 				});
 		})
 	)
