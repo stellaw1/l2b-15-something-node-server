@@ -77,7 +77,7 @@ app.route("/user")
       db.postUser(user)
         .then(results => {
           console.log(results);
-          res.sendStatus(200).send("posted");
+          res.status(200).send("posted");
         }).catch(err => {
           res.sendStatus(400);
         });
