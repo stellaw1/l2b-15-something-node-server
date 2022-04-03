@@ -282,6 +282,8 @@ app.route("/game")
         .then(results => {
           if (results) {
             let gameRes;
+            console.log("data.sender_id ", data.sender_id)
+            console.log("results.sender_id ", results.sender_id)
             if (data.sender_id === results.sender_id) {
               gameRes = checkWinner(results.sender_choice, results.receiver_choice);
               if (gameRes === "win") {
