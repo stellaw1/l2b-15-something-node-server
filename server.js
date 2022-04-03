@@ -352,14 +352,11 @@ app.route("/weather")
       res.sendStatus(400);
     }
     else{
-      var data = [];
+      var data;
       try {
-        data.push(currentWeather.weather[0].main);
-        data.push(Math.round(currentWeather.main.temp));
+        data = String(currentWeather.weather[0].main) + ", " + String(Math.round(currentWeather.main.temp));
       } catch (e) {
-        data = [];
-        data["weather"] = "Sunny";
-        data["temperature"] = "20";
+        data = "Sunny, 20"
       }
       res.status(200).send(data);
     }
