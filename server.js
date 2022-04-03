@@ -285,13 +285,13 @@ app.route("/game")
             if (data.sender_id === results.sender_id) {
               gameRes = checkWinner(results.sender_choice, results.receiver_choice);
               if (gameRes === "win") {
-                console.log("incrementing ", data.sender_id);
+                console.log("s incrementing ", data.sender_id);
                 db.incrementFriendship(data.sender_id);
               }
             } else {
               gameRes = checkWinner(results.receiver_choice, results.sender_choice);
               if (gameRes === "win") {
-                console.log("incrementing ", data.receiver_id);
+                console.log("r incrementing ", data.receiver_id);
                 db.incrementFriendship(data.receiver_id);
               }
             }

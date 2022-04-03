@@ -145,7 +145,7 @@ Database.prototype.incrementFriendship = function(username){
 	return this.connected.then(db =>
 		new Promise((resolve, reject) => {
 			
-			var query = { username: username.username };
+			var query = { username: username };
 
 			const col = db.collection('users');
 			col.findOne(query, function(err, document) {
