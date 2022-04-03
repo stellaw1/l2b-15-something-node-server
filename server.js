@@ -284,18 +284,13 @@ app.route("/game")
             let gameRes;
             console.log("data.sender_id ", data.sender_id)
             console.log("results.sender_id ", results.sender_id)
-            if (data.sender_id === results.sender_id) {
-              gameRes = checkWinner(results.sender_choice, results.receiver_choice);
-              if (gameRes === "win") {
-                console.log("s incrementing ", data.sender_id);
-                db.incrementFriendship(data.sender_id);
-              }
-            } else {
-              gameRes = checkWinner(results.receiver_choice, results.sender_choice);
-              if (gameRes === "win") {
-                console.log("r incrementing ", data.receiver_id);
-                db.incrementFriendship(data.receiver_id);
-              }
+            gameRes = checkWinner(results.sender_choice, results.receiver_choice);
+            if (gameRes === "win") {
+              console.log("s incrementing ", data.sender_id);
+              db.incrementFriendship(results.sender_id);
+            } else if (gameRes === "loss") {
+              console.log("s incrementing ", data.receiver_id);
+              db.incrementFriendship(results.receiver_id);
             }
             res.status(200).send(JSON.stringify(gameRes))
           }
