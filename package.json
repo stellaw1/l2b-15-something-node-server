@@ -10,7 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.3",
-    "mongoose": "^6.2.8"
+    "mongoose": "^6.2.8",
+    "openweathermap-node": "^1.2.0"
   },
   "devDependencies": {
     "dotenv": "^16.0.0",
