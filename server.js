@@ -78,30 +78,6 @@ app.route("/user")
     }
   });
 
-/*
- * increment user friendship_points by 1
- *
- * @param string username
- * @return int 1 if user modified, 0 if nothing changed
- */
-app.route("/increment")
-  .post((req, res) => {
-    let user = req.body;
-
-    if (user) {
-      db.incrementFriendship(user)
-        .then(results => {
-          console.log(results);
-          res.status(200).send(JSON.stringify(results.modifiedCount));
-        }).catch(err => {
-          console.log(err)
-          res.sendStatus(400);
-        });
-    } else {
-      console.log('empty request body found');
-      res.sendStatus(400);
-    }
-  });
 
 /*
  * get chat history for 2 users
@@ -244,12 +220,49 @@ app.route("/friendship")
     }
   });
 
+function checkWinner(sender_choice, receiver_choice) {
+  switch (sender_choice) {
+    case "rock":
+      if (receiver_choice === "rock") {
+        return "tie";
+      } else if (receiver_choice === "paper") {
+        return "loss";
+      } else if (receiver_choice === "scissors") {
+        return "win";
+      } else {
+        return "error";
+      }
+    case "paper":
+      if (receiver_choice === "rock") {
+        return "win";
+      } else if (receiver_choice === "paper") {
+        return "tie";
+      } else if (receiver_choice === "scissors") {
+        return "loss";
+      } else {
+        return "error";
+      }
+    case "scissors":
+      if (receiver_choice === "rock") {
+        return "loss";
+      } else if (receiver_choice === "paper") {
+        return "win";
+      } else if (receiver_choice === "scissors") {
+        return "tie";
+      } else {
+        return "error";
+      }
+    default:
+      return "error";
+  }
+}
+
 /*
  * Get game data
  *
  * @param string sender_id
  * @param string receiver_id
- * @return string "posted" on success and "" on failure
+ * @return string "sender" or "receiver" indicating who won
  */
 app.route("/game")
   .get((req, res) => {
@@ -259,13 +272,19 @@ app.route("/game")
       db.getGameData(data)
         .then(results => {
           if (results) {
-            let response;
+            let gameRes;
             if (data.sender_id === results.sender_id) {
-              response = {sender_choice: results.sender_choice, receiver_choice: results.receiver_choice}
+              gameRes = checkWinner(results.sender_choice, results.receiver_choice);
+              if (gameRes === "win") {
+                db.incrementFriendship(data.sender_id);
+              }
             } else {
-              response = {sender_choice: results.receiver_choice, receiver_choice: results.sender_choice}
+              gameRes = checkWinner(results.receiver_choice, results.sender_choice);
+              if (gameRes === "win") {
+                db.incrementFriendship(data.receiver_id);
+              }
             }
-            res.status(200).send(JSON.stringify(response))
+            res.status(200).send(JSON.stringify(gameRes))
           }
         }).catch(err => {
           console.log(err)
