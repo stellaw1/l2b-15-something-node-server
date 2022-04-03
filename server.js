@@ -282,8 +282,6 @@ app.route("/game")
         .then(results => {
           if (results) {
             let gameRes;
-            console.log("data.sender_id ", data.sender_id)
-            console.log("results.sender_id ", results.sender_id)
 
             if (data.sender_id === results.sender_id) {
               gameRes = checkWinner(results.sender_choice, results.receiver_choice);
@@ -293,10 +291,10 @@ app.route("/game")
 
             // increment friendship points according to game results
             if (gameRes === "win") {
-              console.log("s incrementing ", data.sender_id);
+              console.log("incrementing ", data.sender_id);
               db.incrementFriendship(data.sender_id);
             } else if (gameRes === "loss") {
-              console.log("s incrementing ", data.receiver_id);
+              console.log("incrementing ", data.receiver_id);
               db.incrementFriendship(data.receiver_id);
             }
 
