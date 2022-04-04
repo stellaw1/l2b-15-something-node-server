@@ -231,38 +231,38 @@ app.route("/friendship")
 
 function checkWinner(sender_choice, receiver_choice) {
   switch (sender_choice) {
-    case "rock":
-      if (receiver_choice === "rock") {
-        return "tie";
-      } else if (receiver_choice === "paper") {
-        return "loss";
-      } else if (receiver_choice === "scissors") {
-        return "win";
+    case "ROCK":
+      if (receiver_choice === "ROCK") {
+        return "TIE";
+      } else if (receiver_choice === "PAPER") {
+        return "LOSS";
+      } else if (receiver_choice === "SCISSORS") {
+        return "WIN";
       } else {
-        return "error";
+        return "ERROR";
       }
-    case "paper":
-      if (receiver_choice === "rock") {
-        return "win";
-      } else if (receiver_choice === "paper") {
-        return "tie";
-      } else if (receiver_choice === "scissors") {
-        return "loss";
+    case "PAPER":
+      if (receiver_choice === "ROCK") {
+        return "WIN";
+      } else if (receiver_choice === "PAPER") {
+        return "TIE";
+      } else if (receiver_choice === "SCISSORS") {
+        return "LOSS";
       } else {
-        return "error";
+        return "ERROR";
       }
-    case "scissors":
-      if (receiver_choice === "rock") {
-        return "loss";
-      } else if (receiver_choice === "paper") {
-        return "win";
-      } else if (receiver_choice === "scissors") {
-        return "tie";
+    case "SCISSORS":
+      if (receiver_choice === "ROCK") {
+        return "LOSS";
+      } else if (receiver_choice === "PAPER") {
+        return "WIN";
+      } else if (receiver_choice === "SCISSORS") {
+        return "TIE";
       } else {
-        return "error";
+        return "ERROR";
       }
     default:
-      return "error";
+      return "ERROR";
   }
 }
 
