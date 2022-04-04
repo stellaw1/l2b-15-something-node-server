@@ -186,14 +186,13 @@ Database.prototype.getChatHistory = function(users){
 					if (err) {
 						reject(err);
 					}
-
-					if (items.length == 0) {
+					if (items.length === 0) {
 						resolve("");
+					} else {
+						items.forEach((item, i) => { items[i] = {sender_id: item.sender_id, receiver_id: item.receiver_id, message: item.message, time: item.time}});
+						items.sort((item) => -item.time);
+						resolve(items[0].message);
 					}
-
-					items.forEach((item, i) => { items[i] = {sender_id: item.sender_id, receiver_id: item.receiver_id, message: item.message, time: item.time}});
-					items.sort((item) => -item.time);
-					resolve(items[0].message);
 				});
 		})
 	)

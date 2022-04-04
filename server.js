@@ -290,10 +290,10 @@ app.route("/game")
             }
 
             // increment friendship points according to game results
-            if (gameRes === "win") {
+            if (gameRes === "WIN") {
               console.log("incrementing ", data.sender_id);
               db.incrementFriendship(data.sender_id);
-            } else if (gameRes === "loss") {
+            } else if (gameRes === "LOSS") {
               console.log("incrementing ", data.receiver_id);
               db.incrementFriendship(data.receiver_id);
             }
