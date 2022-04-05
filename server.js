@@ -1,18 +1,16 @@
 const express = require("express");
-const dotenv = require('dotenv');
 const Database = require('./Database.js');
 const OpenWeatherMapHelper = require("openweathermap-node");
 
-dotenv.config();
-
-const db = Database(process.env.DB_URL, process.env.DB_NAME);
+const db = Database("mongodb+srv://admin:spycatadmin@cluster0.p2llx.mongodb.net/database?retryWrites=true&w=majority", "database");
 const weatherHelper = new OpenWeatherMapHelper(
 	{
-		APPID: process.env.WEATHER_API_KEY,
+		APPID: '9e12875a014e100a631a56a3b16f74c9',
 		units: "metric",
 		lang: "en"
 	}
 );
+
 
 const app = express();
 const port = 8000;
@@ -51,7 +49,7 @@ app.route("/user")
       .then(results => {
         console.log(results);
         if (results && results.hasOwnProperty("pet_colour")) {
-          res.status(200).send(JSON.stringify(results.pet_colour));
+          res.status(200).send(results.pet_colour);
         } else {
           console.log("user not found");
           res.sendStatus(400);
