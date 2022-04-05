@@ -8,127 +8,140 @@ describe("api tests", () => {
           .get('/users')
           .set('Content-Type', 'application/json')
         
-        resObj = JSON.parse(res.text);
+        expect(res.status).toEqual(200);
+        // resObj = JSON.parse(res.text);
+        // expect(resObj.length).toEqual(3);
+    });
+
+    it('GET /user should return given user pet colour', async () => {
+        const res = await request(server)
+            .get('/user')
+            .set('Content-Type', 'application/json')
+            .query({
+                username: "POO"
+              })
+        
+        expect(res.status).toEqual(200);
+        // resObj = JSON.parse(res.text);
+        // expect(resObj).toEqual("1");
+    });
+
+    it('POST /user should not post new user', async () => {
+        const res = await request(server)
+            .post('/user')
+            .set('Content-Type', 'application/json')
+            .send({
+                username: "POOP",
+                pet_colour: "69"
+            })
+        
+        expect(res.status).toEqual(200);
+        // expect(res.text).toEqual("user already exists");
+    });
+
+    it('GET /chat should return latest chat', async () => {
+        const res = await request(server)
+            .get('/chat')
+            .set('Content-Type', 'application/json')
+            .query({
+                sender_id: "POOP",
+                receiver_id: "POO"
+            })
+        
         expect(res.status).toEqual(200);
     });
 
-    // it('POST /activities should insert new activity', async () => {
+    it('POST /chat should post chat', async () => {
+        const res = await request(server)
+            .post('/chat')
+            .set('Content-Type', 'application/json')
+            .send({
+                sender_id: "POOP",
+                receiver_id: "POO",
+                message: "POOP to POO"
+            })
+        
+        expect(res.status).toEqual(200);
+    });
+
+    it('GET /isFriends should return friend status', async () => {
+        const res = await request(server)
+            .get('/isFriends')
+            .set('Content-Type', 'application/json')
+            .query({
+                user_id: "POOP",
+                friend_id: "POO"
+            })
+        
+        expect(res.status).toEqual(200);
+    });
+
+    it('POST /friendship should make friendship', async () => {
+        const res = await request(server)
+            .post('/friendship')
+            .set('Content-Type', 'application/json')
+            .send({
+                user_id: "POOP",
+                friend_id: "POO"
+            })
+        
+        expect(res.status).toEqual(200);
+    });
+
+    it('DELETE /friendship should make friendship', async () => {
+        const res = await request(server)
+            .delete('/friendship')
+            .set('Content-Type', 'application/json')
+            .query({
+                user_id: "POOP",
+                friend_id: "POO"
+            })
+        
+        expect(res.status).toEqual(200);
+    });
+
+    it('GET /game get ongoing game', async () => {
+        const res = await request(server)
+            .get('/game')
+            .set('Content-Type', 'application/json')
+            .query({
+                sender_id: "POOP",
+                receiver_id: "POO"
+            })
+        
+        expect(res.status).toEqual(200);
+    });
+
+    it('POST /game starts a new game', async () => {
+        const res = await request(server)
+            .post('/game')
+            .set('Content-Type', 'application/json')
+            .send({
+                sender_id: "POOP",
+                receiver_id: "POO",
+                choice: "Paper"
+            })
+        
+        expect(res.status).toEqual(200);
+    });
+
+    // it('DELETE /game deletes ongoing game', async () => {
     //     const res = await request(server)
-    //         .post('/activities')
+    //         .delete('/game')
     //         .set('Content-Type', 'application/json')
-    //         .send({
-    //             id: 2,
-    //             date: "2022-03-14",
-    //             name: "Hiking",
-    //             duration: 10,
-    //             distance: 55.5,
+    //         .query({
+    //             user_id: "POOP",
+    //             friend_id: "POO"
     //         })
-        
-    //     resObj = JSON.parse(res.text);
-    //     expect(res.status).toEqual(200);
-    //     expect(resObj).toHaveProperty("id");
-    //     expect(resObj).toHaveProperty("date");
-    //     expect(resObj).toHaveProperty("name");
-    //     expect(resObj).toHaveProperty("duration");
-    //     expect(resObj).toHaveProperty("distance");
-    // });
-
-    // it('POST /activities with invalid id property should give 400 status', async () => {
-    //     const res = await request(server)
-    //         .post('/activities')
-    //         .set('Content-Type', 'application/json')
-    //         .send({
-    //             date: "2022-03-14",
-    //             name: "Hiking",
-    //             duration: 10,
-    //             distance: 55.5,
-    //         })
-        
-    //     expect(res.status).toEqual(400);
-    // });
-
-    // it('POST /activities with invalid date property should give 400 status', async () => {
-    //     const res = await request(server)
-    //         .post('/activities')
-    //         .set('Content-Type', 'application/json')
-    //         .send({
-    //             id: 2,
-    //             date: 20220314,
-    //             name: "Hiking",
-    //             duration: 10,
-    //             distance: 55.5,
-    //         })
-        
-    //     expect(res.status).toEqual(400);
-    // });
-
-    // it('POST /activities with invalid name property should give 400 status', async () => {
-    //     const res = await request(server)
-    //         .post('/activities')
-    //         .set('Content-Type', 'application/json')
-    //         .send({
-    //             id: 2,
-    //             date: "2022-03-14",
-    //             duration: 10,
-    //             distance: 55.5,
-    //         })
-        
-    //     expect(res.status).toEqual(400);
-    // });
-
-    // it('POST /activities with invalid duration property should give 400 status', async () => {
-    //     const res = await request(server)
-    //         .post('/activities')
-    //         .set('Content-Type', 'application/json')
-    //         .send({
-    //             id: 2,
-    //             date: "2022-03-14",
-    //             name: "Hiking",
-    //             duration: "10",
-    //             distance: 55.5,
-    //         })
-        
-    //     expect(res.status).toEqual(400);
-    // });
-
-    // it('POST /activities with invalid distance property should give 400 status', async () => {
-    //     const res = await request(server)
-    //         .post('/activities')
-    //         .set('Content-Type', 'application/json')
-    //         .send({
-    //             id: 2,
-    //             date: "2022-03-14",
-    //             name: "Hiking",
-    //             duration: 10,
-    //             distance: "123fakenumber",
-    //         })
-        
-    //     expect(res.status).toEqual(400);
-    // });
-
-    // it('PUT /activities should modify one activity', async () => {
-    //     const res = await request(server)
-    //         .put('/activities/2')
-    //         .set('Content-Type', 'application/json')
-    //         .send({
-    //             date: "2022-05-14",
-    //             name: "Adjustment",
-    //             duration: 100,
-    //             distance: 70.7,
-    //         })
-
-        
-    //     resObj = JSON.parse(res.text);
-        
-    //     expect(res.status).toEqual(200);
-    //     expect(resObj.modifiedCount).toEqual(1);
-    // });
-
-    // it('DELETE /activities should delete one activity', async () => {
-    //     const res = await request(server)
-    //       .delete('/activities/2')
-    //       .set('Content-Type', 'application/json')
         
     //     expect(res.status).toEqual(200);
     // });
+
+    it('GET /weather gets current weather', async () => {
+        const res = await request(server)
+            .get('/weather')
+            .set('Content-Type', 'application/json')
+        
+        expect(res.status).toEqual(200);
+    });
 })
