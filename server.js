@@ -74,10 +74,19 @@ app.route("/user")
     console.log(req);
 
     if (user) {
-      db.postUser(user)
+      db.getUserByUsername(user)
         .then(results => {
-          console.log(results);
-          res.status(200).send("posted");
+          if (!results) {
+            db.postUser(user)
+            .then(results => {
+              console.log(results);
+              res.status(200).send("posted");
+            }).catch(err => {
+              res.sendStatus(400);
+            });
+          } else {
+            res.status(200).send("user already exists");
+          }
         }).catch(err => {
           res.sendStatus(400);
         });

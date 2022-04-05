@@ -1,3 +1,4 @@
+const res = require('express/lib/response');
 const { MongoClient, AbstractCursor } = require('mongodb');	// require the mongodb driver
 
 /*
@@ -95,6 +96,27 @@ Database.prototype.getAllUsers = function(){
 					
 					resolve(items);
 				});
+		})
+	)
+}
+
+Database.prototype.getUserByUsername = function(username){
+	return this.connected.then(db =>
+		new Promise((resolve, reject) => {
+			const col = db.collection('users');
+
+			let query = username.username;
+
+			col.findOne({username: query}, function(err, document) {
+				if (err) {
+					reject(err);
+				}
+				if (document) {
+					resolve(true);
+				} else {
+					resolve(false);
+				}
+			});
 		})
 	)
 }
