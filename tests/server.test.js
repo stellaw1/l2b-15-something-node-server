@@ -2,9 +2,6 @@ const server = require('../server.js');
 var request = require('supertest');
 
 describe("api tests", () => {
-    beforeAll(() => {
-        process.env.DB_NAME = 'test';
-    })
 
     it('GET /users should return all users and their friendship points', async () => {
         const res = await request(server)
