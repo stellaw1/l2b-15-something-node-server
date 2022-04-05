@@ -55,11 +55,7 @@ function isGameType(game) {
 	return null;
 }
 
-/**
- * Uses mongodb v3.6+ - [API Documentation](http://mongodb.github.io/node-mongodb-native/3.6/api/)
- * Database wraps a mongoDB connection to provide a higher-level abstraction layer
- * for manipulating the objects in our cpen322 app.
- */
+
 function Database(mongoUrl, dbName){
 	if (!(this instanceof Database)) return new Database(mongoUrl, dbName);
 	this.connected = new Promise((resolve, reject) => {

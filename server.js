@@ -1,16 +1,18 @@
 const express = require("express");
+const dotenv = require('dotenv');
 const Database = require('./Database.js');
 const OpenWeatherMapHelper = require("openweathermap-node");
 
-const db = Database("mongodb+srv://admin:spycatadmin@cluster0.p2llx.mongodb.net/database?retryWrites=true&w=majority", "database");
+dotenv.config();
+
+const db = Database(process.env.DB_URL, process.env.DB_NAME);
 const weatherHelper = new OpenWeatherMapHelper(
 	{
-		APPID: '9e12875a014e100a631a56a3b16f74c9',
+		APPID: process.env.WEATHER_API_KEY,
 		units: "metric",
 		lang: "en"
 	}
 );
-
 
 const app = express();
 const port = 8000;
