@@ -4,7 +4,8 @@
   "description": "backend server to handle REST api for spycat",
   "main": "server.js",
   "scripts": {
-    "devStart": "nodemon server.js"
+    "devStart": "nodemon server.js",
+    "test": "jest"
   },
   "author": "l2b-15",
   "license": "ISC",
@@ -15,6 +16,8 @@
   },
   "devDependencies": {
     "dotenv": "^16.0.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "jest": "^27.5.1",
+    "supertest": "^6.2.2"
   }
 }
