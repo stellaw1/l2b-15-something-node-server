@@ -57,7 +57,7 @@ app.route("/user")
       }).catch(err => {
         console.log(err);
         res.sendStatus(400);
-      });;
+      });
     } else {
       console.log('empty request body found');
       res.sendStatus(400);
@@ -71,23 +71,36 @@ app.route("/user")
    */
   .post((req, res) => {
     let user = req.body;
-    console.log(req);
+    // console.log(req);
 
     if (user) {
-      db.getUserByUsername(user)
+      db.getColourByUsername(user)
         .then(results => {
-          if (!results) {
-            db.postUser(user)
-            .then(results => {
-              console.log(results);
-              res.status(200).send("posted");
-            }).catch(err => {
-              res.sendStatus(400);
-            });
+          console.log(results);
+          if (results) {
+            if (results.hasOwnProperty("pet_colour") 
+              && results.pet_colour !== user.pet_colour) {
+                db.updateUserPetColour(user.username, user.pet_colour)
+                  .then(results => {
+                    res.status(200).send("updated colour");
+                  }).catch(err => {
+                    res.sendStatus(400);
+                  });
+            } else {
+              console.log("user already exists");
+              res.status(200).send("user already exists");
+            }
           } else {
-            res.status(200).send("user already exists");
+            console.log("user not found, posting a new one");
+            db.postUser(user)
+              .then(results => {
+                res.status(200).send("posted");
+              }).catch(err => {
+                res.sendStatus(400);
+              })
           }
         }).catch(err => {
+          console.log(err);
           res.sendStatus(400);
         });
     } else {

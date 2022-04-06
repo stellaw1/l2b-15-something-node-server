@@ -96,15 +96,16 @@ Database.prototype.getAllUsers = function(){
 	)
 }
 
-Database.prototype.getUserByUsername = function(username){
+Database.prototype.updateUserPetColour = function(username, pet_colour){
 	return this.connected.then(db =>
 		new Promise((resolve, reject) => {
 			const col = db.collection('users');
 
-			let query = username.username;
-
-			col.findOne({username: query}, function(err, document) {
+			col.findOneAndUpdate(
+				{username: username}, 
+				{ $set: {pet_colour: pet_colour} }, function(err, document) {
 				if (err) {
+					console.log(err);
 					reject(err);
 				}
 				if (document) {
