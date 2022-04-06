@@ -141,8 +141,8 @@ app.route("/chat")
    * @return string "posted" on success and "" on failure
    */
   .post((req, res) => {
+    console.log(req);
     let chat = req.body;
-    console.log(chat);
 
     if (chat) {
       db.postChat(chat)
