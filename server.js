@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded());
 
 
-/*
+/**
  * get list of all users and their friendship points
  *
  * @return Array<{string username, int friendship_points}>
@@ -34,7 +34,7 @@ app.route("/users")
   });
 
 
-  /*
+  /**
    * get pet colour for one user
    *
    * @param string username
@@ -63,7 +63,7 @@ app.route("/user")
       res.sendStatus(400);
     }
   })
-  /*
+  /**
    * post new user
    *
    * @param {string username, int pet_colour}
@@ -97,7 +97,7 @@ app.route("/user")
   });
 
 
-/*
+/**
  * get chat history for 2 users
  *
  * @param string sender_id
@@ -119,7 +119,7 @@ app.route("/chat")
       res.sendStatus(400);
     }
   })
-  /*
+  /**
    * post new chat message
    *
    * @param string sender_id
@@ -129,6 +129,7 @@ app.route("/chat")
    */
   .post((req, res) => {
     let chat = req.body;
+    console.log(chat);
 
     if (chat) {
       db.postChat(chat)
@@ -145,7 +146,7 @@ app.route("/chat")
     }
   });
 
-/*
+/**
  * Checks whether friend_id is a friend of user_id
  *
  * @param string user_id
@@ -168,7 +169,7 @@ app.route('/isFriends')
     }
   })
 
-/*
+/**
  * Gets list of friends for a user
  *
  * @param string user_id
@@ -189,7 +190,7 @@ app.route("/friendship")
       res.sendStatus(400);
     }
   })
-  /*
+  /**
    * Post new friendship
    *
    * @param string user_id
@@ -213,7 +214,7 @@ app.route("/friendship")
       res.sendStatus(400);
     }
   })
-  /*
+  /**
    * Delete a friendship
    *
    * @param string user_id
@@ -275,7 +276,7 @@ function checkWinner(sender_choice, receiver_choice) {
   }
 }
 
-/*
+/**
  * Get game data
  *
  * @param string sender_id
@@ -318,7 +319,7 @@ app.route("/game")
       res.sendStatus(400);
     }
   })
-  /*
+  /**
   * Post game data
   *
   * @param string sender_id
@@ -343,7 +344,7 @@ app.route("/game")
       res.sendStatus(400);
     }
   })
-  /*
+  /**
   * Delete game data
   *
   * @param string sender_id
@@ -373,7 +374,7 @@ app.route("/game")
   });
 
 
-/*
+/**
  * Get weather
  *
  * @return string "posted" on success and "" on failure

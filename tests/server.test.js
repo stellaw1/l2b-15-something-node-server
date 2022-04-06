@@ -125,17 +125,17 @@ describe("api tests", () => {
         expect(res.status).toEqual(200);
     });
 
-    // it('DELETE /game deletes ongoing game', async () => {
-    //     const res = await request(server)
-    //         .delete('/game')
-    //         .set('Content-Type', 'application/json')
-    //         .query({
-    //             user_id: "POOP",
-    //             friend_id: "POO"
-    //         })
+    it('DELETE /game deletes ongoing game', async () => {
+        const res = await request(server)
+            .delete('/game')
+            .set('Content-Type', 'application/json')
+            .query({
+                user_id: "POOP",
+                friend_id: "POO"
+            })
         
-    //     expect(res.status).toEqual(200);
-    // });
+        expect(res.status).toEqual(200);
+    });
 
     it('GET /weather gets current weather', async () => {
         const res = await request(server)
