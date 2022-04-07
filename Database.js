@@ -253,34 +253,27 @@ Database.prototype.getIsFriends = function(data){
 				reject(new Error("invalid " + err + " property in given friendship object"));
 			}
 
-			var query1 = { user_id: data.user_id };
-			var query2 = { user_id: data.friend_id };
+			var query1 = { 
+				user_id: data.user_id,
+				friend_id: data.friend_id 
+			};
+			var query2 = { 
+				user_id: data.friend_id,
+				friend_id: data.user_id
+			};
+			var query = { $or: [ query1, query2 ] }
 			
 			const col = db.collection('friendships');
-			col.find(query1).toArray(function(err, items) {
+			col.find(query).toArray(function(err, items) {
 				if (err) {
 					reject(err);
 				}
-
-				items.forEach((item, i) => {items[i] = item.friend_id});
 				console.log(items);
 
-				if (items.includes(data.friend_id)) { 
+				if (items.length >= 1) { 
 					resolve("friends");
 				} else {
-					col.find(query2).toArray(function(err, items) {
-						if (err) {
-							reject(err);
-						}
-		
-						items.forEach((item, i) => {items[i] = item.friend_id});
-		
-						if (items.includes(data.user_id)) { 
-							resolve("friends");
-						} else {
-							resolve("");
-						}
-					});
+					resolve("");
 				}
 			});
 		})

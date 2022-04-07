@@ -176,7 +176,10 @@ app.route('/isFriends')
       db.getIsFriends(data)
         .then(results => {
           console.log(results);
-          res.status(200).send(JSON.stringify(results));
+          res.status(200).send(results);
+        }).catch(err => {
+          console.log(err);
+          res.sendStatus(400);
         });
     } else {
       console.log('empty query body found');
