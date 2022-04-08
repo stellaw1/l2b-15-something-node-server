@@ -3,14 +3,17 @@ var request = require('supertest');
 
 describe("api tests", () => {
 
-    it('GET /users should return all users and their friendship points', async () => {
+    it('POST /user should post new user', async () => {
         const res = await request(server)
-          .get('/users')
-          .set('Content-Type', 'application/json')
+            .post('/user')
+            .set('Content-Type', 'application/json')
+            .send({
+                username: "USER2",
+                pet_colour: "8"
+            })
         
         expect(res.status).toEqual(200);
-        // resObj = JSON.parse(res.text);
-        // expect(resObj.length).toEqual(3);
+        expect(res.text).toEqual("posted");
     });
 
     it('GET /user should return given user pet colour', async () => {
@@ -18,47 +21,45 @@ describe("api tests", () => {
             .get('/user')
             .set('Content-Type', 'application/json')
             .query({
-                username: "POO"
+                username: "USER2"
               })
         
         expect(res.status).toEqual(200);
-        // resObj = JSON.parse(res.text);
-        // expect(resObj).toEqual("1");
+        resObj = JSON.parse(res.text);
+        expect(resObj).toEqual(8);
     });
 
-    it('POST /user should not post new user', async () => {
+    it('GET /user should return given user pet colour', async () => {
         const res = await request(server)
-            .post('/user')
-            .set('Content-Type', 'application/json')
-            .send({
-                username: "POOP",
-                pet_colour: "69"
-            })
-        
-        expect(res.status).toEqual(200);
-        // expect(res.text).toEqual("user already exists");
-    });
-
-    it('GET /chat should return latest chat', async () => {
-        const res = await request(server)
-            .get('/chat')
+            .get('/user')
             .set('Content-Type', 'application/json')
             .query({
-                sender_id: "POOP",
-                receiver_id: "POO"
-            })
+                username: "USER2"
+              })
         
         expect(res.status).toEqual(200);
+        resObj = JSON.parse(res.text);
+        expect(resObj).toEqual(8);
     });
 
-    it('POST /chat should post chat', async () => {
+    it('GET /users should return all users and their friendship points', async () => {
+        console.log(process.env.DB_NAME);
         const res = await request(server)
-            .post('/chat')
+          .get('/users')
+          .set('Content-Type', 'application/json')
+        
+        expect(res.status).toEqual(200);
+        resObj = JSON.parse(res.text);
+        expect(resObj.length).toEqual(2);
+    });
+
+    it('POST /friendship should make friendship', async () => {
+        const res = await request(server)
+            .post('/friendship')
             .set('Content-Type', 'application/json')
             .send({
-                sender_id: "POOP",
-                receiver_id: "POO",
-                message: "POOP to POO"
+                user_id: "USER1",
+                friend_id: "USER2"
             })
         
         expect(res.status).toEqual(200);
@@ -69,20 +70,8 @@ describe("api tests", () => {
             .get('/isFriends')
             .set('Content-Type', 'application/json')
             .query({
-                user_id: "POOP",
-                friend_id: "POO"
-            })
-        
-        expect(res.status).toEqual(200);
-    });
-
-    it('POST /friendship should make friendship', async () => {
-        const res = await request(server)
-            .post('/friendship')
-            .set('Content-Type', 'application/json')
-            .send({
-                user_id: "POOP",
-                friend_id: "POO"
+                user_id: "USER1",
+                friend_id: "USER2"
             })
         
         expect(res.status).toEqual(200);
@@ -93,23 +82,38 @@ describe("api tests", () => {
             .delete('/friendship')
             .set('Content-Type', 'application/json')
             .query({
-                user_id: "POOP",
-                friend_id: "POO"
+                user_id: "USER1",
+                friend_id: "USER2"
             })
         
         expect(res.status).toEqual(200);
     });
 
-    it('GET /game get ongoing game', async () => {
+    it('POST /chat should post chat', async () => {
         const res = await request(server)
-            .get('/game')
+            .post('/chat')
             .set('Content-Type', 'application/json')
-            .query({
-                sender_id: "POOP",
-                receiver_id: "POO"
+            .send({
+                sender_id: "USER1",
+                receiver_id: "USER2",
+                message: "message from USER1 to USER2"
             })
         
         expect(res.status).toEqual(200);
+    });
+
+    it('GET /chat should return latest chat', async () => {
+        const res = await request(server)
+            .get('/chat')
+            .set('Content-Type', 'application/json')
+            .query({
+                sender_id: "USER1",
+                receiver_id: "USER2"
+            })
+        
+        expect(res.status).toEqual(200);
+        resObj = JSON.parse(res.text);
+        expect(resObj).toEqual("message from USER1 to USER2");
     });
 
     it('POST /game starts a new game', async () => {
@@ -117,12 +121,53 @@ describe("api tests", () => {
             .post('/game')
             .set('Content-Type', 'application/json')
             .send({
-                sender_id: "POOP",
-                receiver_id: "POO",
-                choice: "Paper"
+                sender_id: "USER1",
+                receiver_id: "USER2",
+                choice: "PAPER"
             })
         
         expect(res.status).toEqual(200);
+    });
+
+    it('POST /game updates existing game', async () => {
+        const res = await request(server)
+            .post('/game')
+            .set('Content-Type', 'application/json')
+            .send({
+                sender_id: "USER2",
+                receiver_id: "USER1",
+                choice: "ROCK"
+            })
+        
+        expect(res.status).toEqual(200);
+    });
+
+    it('GET /game get ongoing game for USER1', async () => {
+        const res = await request(server)
+            .get('/game')
+            .set('Content-Type', 'application/json')
+            .query({
+                sender_id: "USER1",
+                receiver_id: "USER2"
+            })
+        
+        expect(res.status).toEqual(200);
+        resObj = JSON.parse(res.text);
+        expect(resObj).toEqual("WIN");
+    });
+
+    it('GET /game get ongoing game for USER2', async () => {
+        const res = await request(server)
+            .get('/game')
+            .set('Content-Type', 'application/json')
+            .query({
+                sender_id: "USER2",
+                receiver_id: "USER1"
+            })
+        
+        expect(res.status).toEqual(200);
+        resObj = JSON.parse(res.text);
+        expect(resObj).toEqual("LOSS");
     });
 
     it('DELETE /game deletes ongoing game', async () => {
@@ -130,8 +175,8 @@ describe("api tests", () => {
             .delete('/game')
             .set('Content-Type', 'application/json')
             .query({
-                user_id: "POOP",
-                friend_id: "POO"
+                sender_id: "USER1",
+                receiver_id: "USER2"
             })
         
         expect(res.status).toEqual(200);
